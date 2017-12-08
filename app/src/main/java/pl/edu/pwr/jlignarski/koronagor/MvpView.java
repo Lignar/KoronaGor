@@ -6,6 +6,6 @@ import android.view.View;
  * @author janusz on 08.12.17.
  */
 
-public interface MvcView {
+public interface MvpView {
     View getRootView();
 }

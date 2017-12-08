@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class MenuActivity extends AppCompatActivity implements MenuViewMvc.MenuViewListener {
+public class MenuActivity extends AppCompatActivity implements MenuViewMvp.MenuViewListener {
 
-    private MenuViewMvc menuView;
+    private MenuViewMvp menuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        menuView = new MenuViewMvcImpl(getLayoutInflater(), null);
+        menuView = new MenuViewMvpImpl(getLayoutInflater(), null);
         menuView.attachListener(this);
         setContentView(menuView.getRootView());
     }

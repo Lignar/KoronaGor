@@ -9,13 +9,13 @@ import android.widget.Button;
  * @author janusz on 08.12.17.
  */
 
-class MenuViewMvcImpl implements MenuViewMvc {
+class MenuViewMvpImpl implements MenuViewMvp {
 
     private View rootView;
     private Button peakListButton;
     private MenuViewListener actionListener;
 
-    public MenuViewMvcImpl(LayoutInflater inflater, ViewGroup container) {
+    public MenuViewMvpImpl(LayoutInflater inflater, ViewGroup container) {
         this.rootView = inflater.inflate(R.layout.activity_menu, container);
         initialize();
     }
