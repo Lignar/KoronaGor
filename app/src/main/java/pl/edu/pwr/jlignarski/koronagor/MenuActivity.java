@@ -1,16 +1,24 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MenuActivity extends AppCompatActivity implements MenuViewMvc.MenuViewListener {
 
-public class MenuActivity extends AppCompatActivity {
+    private MenuViewMvc menuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        menuView = new MenuViewMvcImpl(getLayoutInflater(), null);
+        menuView.attachListener(this);
+        setContentView(menuView.getRootView());
+    }
+
+    @Override
+    public void onPeakListButtonClick() {
+        Intent intent = new Intent(this, PeakListActivity.class);
+        startActivity(intent);
     }
 }

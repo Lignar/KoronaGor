@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KoronaGor</string>
+    <string name="peak_list_button">Lista szczytów</string>
 </resources>
