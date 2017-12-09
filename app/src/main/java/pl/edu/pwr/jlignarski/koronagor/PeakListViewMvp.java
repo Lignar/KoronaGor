@@ -7,5 +7,10 @@ import android.support.v7.widget.RecyclerView;
  */
 
 interface PeakListViewMvp extends MvpView {
+
+    interface PeakListViewListener {
+        void onPeakListItemClick(Peak peak);
+    }
+
     void setAdapter(RecyclerView.Adapter adapter);
 }
