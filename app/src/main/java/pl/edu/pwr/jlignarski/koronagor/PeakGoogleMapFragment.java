@@ -1,13 +1,9 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +14,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -30,7 +23,6 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     private OnPeakMapInteractionListener mListener;
     private GoogleMap map;
     private MapView mapView;
-    private Marker currLocationMarker;
 
     public static PeakGoogleMapFragment newInstance(Bundle bundle) {
         PeakGoogleMapFragment peakGoogleMapFragment = new PeakGoogleMapFragment();
@@ -50,11 +42,6 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         return peakGoogleMapView.getRootView();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-        }
     }
 
     @Override
@@ -81,6 +68,15 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMyLocationEnabled(true);
         mListener.registerLocationObserver(this);
+        drawPeakMarkers();
+    }
+
+    private void drawPeakMarkers() {
+        Peak peak = RepositoryDelegate.getSystemRepo().getPeakById((String) getArguments().get(BundleKey.PEAK_ID.getKey()));
+        for (MarkerOptions marker : peak.getMapMarkers()) {
+            map.addMarker(marker);
+        }
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(peak.getLatLng(), 11));
     }
 
     @Override
@@ -112,18 +108,6 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
-        if (currLocationMarker != null) {
-            currLocationMarker.remove();
-        }
-
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        currLocationMarker = map.addMarker(markerOptions);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
     }
 
     public interface OnPeakMapInteractionListener {

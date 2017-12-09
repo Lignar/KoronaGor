@@ -8,4 +8,6 @@ import java.util.List;
 
 interface SystemRepository {
     List<Peak> getAllPeaks();
+
+    Peak getPeakById(String peakId);
 }

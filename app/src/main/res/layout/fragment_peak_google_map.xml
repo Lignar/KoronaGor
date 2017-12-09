@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context="pl.edu.pwr.jlignarski.koronagor.PeakGoogleMapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/googleMapView"
         android:layout_width="match_parent"

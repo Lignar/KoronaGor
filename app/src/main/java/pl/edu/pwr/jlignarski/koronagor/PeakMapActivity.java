@@ -76,7 +76,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         @Override
         public void onLocationResult(LocationResult locationResult) {
             for (Location location : locationResult.getLocations()) {
-                Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+                Log.i(TAG, "Location: " + location.getLatitude() + " " + location.getLongitude());
                 lastLocation = location;
             }
             for (LocationListener observer : locationObservers) {
@@ -90,8 +90,8 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(30000);
-        locationRequest.setFastestInterval(30000);
+        locationRequest.setInterval(120000);
+        locationRequest.setFastestInterval(120000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
