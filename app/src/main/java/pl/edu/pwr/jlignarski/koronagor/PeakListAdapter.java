@@ -35,8 +35,7 @@ class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.peak_list_item, parent, false);
         view.setOnClickListener(getOnClickListener(parent));
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @NonNull

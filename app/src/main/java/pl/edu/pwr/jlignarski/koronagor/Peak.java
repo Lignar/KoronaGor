@@ -27,4 +27,8 @@ class Peak {
     public String getRange() {
         return range;
     }
+
+    public String getId() {
+        return name;
+    }
 }
