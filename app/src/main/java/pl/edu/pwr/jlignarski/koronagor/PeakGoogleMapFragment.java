@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.Marker;
 
 public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
-    private PeakGoogleMapMvp peakGoogleMapView;
+    private PeakGoogleMapViewMvp peakGoogleMapView;
     private OnPeakMapInteractionListener mListener;
     private GoogleMap map;
     private RouteDrawingService routeDrawingService;
@@ -40,7 +40,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        peakGoogleMapView = new PeakGoogleMapMvp(inflater, container);
+        peakGoogleMapView = new PeakGoogleMapViewMvp(inflater, container);
         peakGoogleMapView.getMap().onCreate(savedInstanceState);
         peakGoogleMapView.getMap().getMapAsync(this);
         return peakGoogleMapView.getRootView();

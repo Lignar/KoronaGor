@@ -10,13 +10,13 @@ import com.google.android.gms.maps.MapView;
  * @author janusz on 09.12.17.
  */
 
-class PeakGoogleMapMvp implements MvpView {
+class PeakGoogleMapViewMvp implements MvpView {
 
 
     private final View rootView;
     private MapView googleMapView;
 
-    public PeakGoogleMapMvp(LayoutInflater inflater, ViewGroup container) {
+    public PeakGoogleMapViewMvp(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_peak_google_map, container, false);
         initialise();
     }

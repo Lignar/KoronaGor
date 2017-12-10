@@ -9,12 +9,12 @@ import com.qozix.tileview.TileView;
  * @author janusz on 10.12.17.
  */
 
-class PeakTouristMapMvp implements MvpView {
+class PeakTouristMapViewMvp implements MvpView {
 
     private final TileView rootView;
     private Peak peak;
 
-    public PeakTouristMapMvp(Peak peak) {
+    public PeakTouristMapViewMvp(Peak peak) {
         this.peak = peak;
         this.rootView = new TileView(App.getAppContext());
         peak.setMapSize(rootView);
@@ -28,7 +28,11 @@ class PeakTouristMapMvp implements MvpView {
         return rootView;
     }
 
-    public void addLocationMarker(Location location) {
-        peak.addLocationMarker(rootView, location);
+    public View addLocationMarker(Location location) {
+        return peak.addLocationMarker(rootView, location);
+    }
+
+    public void removeLocationMarker(View lastLocationMarker) {
+        rootView.removeMarker(lastLocationMarker);
     }
 }

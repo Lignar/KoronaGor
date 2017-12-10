@@ -23,7 +23,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PeakTouristMapFragment.OnTouristMapInteractionListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        PeakTouristMapFragment.OnTouristMapInteractionListener, PeakDetailsFragment.OnPeakDetailsInteractionListener {
 
     private static final String TAG = "PeakMapActivity";
     private static final int UPDATE_INTERVAL = 60000;
@@ -33,34 +34,28 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     private LocationRequest locationRequest;
     private Set<LocationListener> locationObservers = new HashSet<>();
     private Peak peak;
+    private PeakGoogleMapFragment peakGoogleMapFragment;
+    private PeakTouristMapFragment peakTouristMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peak);
         peak = getPeakFromBundle();
-//        createPeakGoogleMapFragment();
-        createPeakTouristMapFragment();
+        createPeakDetailsFragment();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         buildGoogleApiClient();
     }
 
-    private void createPeakTouristMapFragment() {
-        PeakTouristMapFragment peakTouristMapFragment = PeakTouristMapFragment.newInstance(peak);
+    private void createPeakDetailsFragment() {
+        PeakDetailsFragment peakDetailsFragment = PeakDetailsFragment.newInstance(peak);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.peakMapContainer, peakTouristMapFragment);
+        fragmentTransaction.add(R.id.peakContainer, peakDetailsFragment);
         fragmentTransaction.commit();
     }
 
     private Peak getPeakFromBundle() {
         return RepositoryDelegate.getSystemRepo().getPeakById((String) getIntent().getExtras().get(BundleKey.PEAK_ID.getKey()));
-    }
-
-    private void createPeakGoogleMapFragment() {
-        PeakGoogleMapFragment peakGoogleMapFragment = PeakGoogleMapFragment.newInstance(peak);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.peakMapContainer, peakGoogleMapFragment);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -125,5 +120,27 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     @Override
     public void unregisterLocationObserver(LocationListener listener) {
         locationObservers.remove(listener);
+    }
+
+    @Override
+    public void openGoogleMap() {
+        if (peakGoogleMapFragment == null) {
+            peakGoogleMapFragment = PeakGoogleMapFragment.newInstance(peak);
+        }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.peakContainer, peakGoogleMapFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void openTouristMap() {
+        if (peakTouristMapFragment == null) {
+            peakTouristMapFragment = PeakTouristMapFragment.newInstance(peak);
+        }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.peakContainer, peakTouristMapFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

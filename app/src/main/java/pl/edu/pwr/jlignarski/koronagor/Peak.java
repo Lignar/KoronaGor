@@ -2,6 +2,7 @@ package pl.edu.pwr.jlignarski.koronagor;
 
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -88,14 +89,15 @@ class Peak {
         Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
         imageView.setImageDrawable(drawable);
         rootView.addMarker(imageView, mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude), -0.5f, -1f);
-//        rootView.addMarker(imageView, 1, 1, 0f, 0f);
+        
     }
 
-    public void addLocationMarker(TileView rootView, Location location) {
+    public View addLocationMarker(TileView rootView, Location location) {
         ImageView imageView = new ImageView(App.getAppContext());
         Drawable drawable = App.getAppContext().getDrawable(R.drawable.circlesmall);
         imageView.setImageDrawable(drawable);
-        rootView.addMarker(imageView, mapInfo.lngPosition(location.getLongitude()), mapInfo.latPosition(location.getLatitude())
+        return rootView.addMarker(imageView, mapInfo.lngPosition(location.getLongitude()), mapInfo.latPosition(location
+                        .getLatitude())
                 , -0.5f, -0.5f);
     }
 }

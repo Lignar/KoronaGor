@@ -9,14 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class PeakTouristMapFragment extends Fragment implements LocationListener {
 
     private OnTouristMapInteractionListener mListener;
     private Peak peak;
-    private PeakTouristMapMvp peakTouristMapView;
+    private PeakTouristMapViewMvp peakTouristMapView;
+    private View lastLocationMarker;
 
     public PeakTouristMapFragment() {
     }
@@ -25,7 +24,8 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        peakTouristMapView = new PeakTouristMapMvp(peak);
+        peakTouristMapView = new PeakTouristMapViewMvp(peak);
+        mListener.registerLocationObserver(this);
         return peakTouristMapView.getRootView();
     }
 
@@ -38,7 +38,6 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
             throw new RuntimeException(context.toString()
                     + " must implement OnTouristMapInteractionListener");
         }
-        mListener.registerLocationObserver(this);
     }
 
     @Override
@@ -71,7 +70,10 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
 
     @Override
     public void onLocationChanged(Location location) {
-        peakTouristMapView.addLocationMarker(location);
+        if (lastLocationMarker != null) {
+            peakTouristMapView.removeLocationMarker(lastLocationMarker);
+        }
+        lastLocationMarker = peakTouristMapView.addLocationMarker(location);
     }
 
     public interface OnTouristMapInteractionListener extends LocationObserverManager {
