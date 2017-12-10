@@ -1,13 +1,11 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,37 +18,46 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PeakTouristMapFragment.OnTouristMapInteractionListener {
 
     private static final String TAG = "PeakMapActivity";
     private static final int UPDATE_INTERVAL = 60000;
-    private Bundle extras;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location lastLocation;
     private LocationRequest locationRequest;
     private Set<LocationListener> locationObservers = new HashSet<>();
+    private Peak peak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_peak_map);
-        extras = getIntent().getExtras();
-        createPeakGoogleMapFragment();
+        setContentView(R.layout.activity_peak);
+        peak = getPeakFromBundle();
+//        createPeakGoogleMapFragment();
+        createPeakTouristMapFragment();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         buildGoogleApiClient();
     }
 
+    private void createPeakTouristMapFragment() {
+        PeakTouristMapFragment peakTouristMapFragment = PeakTouristMapFragment.newInstance(peak);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.peakMapContainer, peakTouristMapFragment);
+        fragmentTransaction.commit();
+    }
+
+    private Peak getPeakFromBundle() {
+        return RepositoryDelegate.getSystemRepo().getPeakById((String) getIntent().getExtras().get(BundleKey.PEAK_ID.getKey()));
+    }
+
     private void createPeakGoogleMapFragment() {
-        PeakGoogleMapFragment peakGoogleMapFragment = PeakGoogleMapFragment.newInstance(extras);
+        PeakGoogleMapFragment peakGoogleMapFragment = PeakGoogleMapFragment.newInstance(peak);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.peakMapContainer, peakGoogleMapFragment);
         fragmentTransaction.commit();

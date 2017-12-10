@@ -33,7 +33,7 @@
 
         <activity
             android:name=".MenuActivity"
-            android:configChanges="orientation">
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,10 +42,10 @@
         </activity>
         <activity
             android:name=".PeakListActivity"
-            android:configChanges="orientation" />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".PeakMapActivity"
-            android:configChanges="orientation" />
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

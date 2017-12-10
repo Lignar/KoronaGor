@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -23,14 +22,14 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     private PeakGoogleMapMvp peakGoogleMapView;
     private OnPeakMapInteractionListener mListener;
     private GoogleMap map;
-    private MapView mapView;
     private RouteDrawingService routeDrawingService;
     private Location lastLocation;
     private Marker activeMarker;
+    private Peak peak;
 
-    public static PeakGoogleMapFragment newInstance(Bundle bundle) {
+    public static PeakGoogleMapFragment newInstance(Peak peak) {
         PeakGoogleMapFragment peakGoogleMapFragment = new PeakGoogleMapFragment();
-        peakGoogleMapFragment.setArguments(bundle);
+        peakGoogleMapFragment.setPeak(peak);
         return peakGoogleMapFragment;
     }
 
@@ -42,9 +41,8 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         peakGoogleMapView = new PeakGoogleMapMvp(inflater, container);
-        mapView = peakGoogleMapView.getMap();
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        peakGoogleMapView.getMap().onCreate(savedInstanceState);
+        peakGoogleMapView.getMap().getMapAsync(this);
         return peakGoogleMapView.getRootView();
     }
 
@@ -76,7 +74,6 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     }
 
     private void drawPeakMarkers() {
-        Peak peak = RepositoryDelegate.getSystemRepo().getPeakById((String) getArguments().get(BundleKey.PEAK_ID.getKey()));
         for (MarkerOptionsWrapper marker : peak.getMapMarkers()) {
             marker.addToMap(map);
         }
@@ -115,7 +112,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onResume() {
-        mapView.onResume();
+        peakGoogleMapView.getMap().onResume();
         super.onResume();
         mListener.registerLocationObserver(this);
     }
@@ -124,20 +121,20 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+        peakGoogleMapView.getMap().onPause();
         mListener.unregisterLocationObserver(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        peakGoogleMapView.getMap().onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        peakGoogleMapView.getMap().onLowMemory();
     }
 
     @Override
@@ -149,9 +146,11 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         }
     }
 
-    public interface OnPeakMapInteractionListener {
-        void registerLocationObserver(LocationListener listener);
+    public void setPeak(Peak peak) {
+        this.peak = peak;
+    }
 
-        void unregisterLocationObserver(LocationListener listener);
+    public interface OnPeakMapInteractionListener extends LocationObserverManager{
+
     }
 }

@@ -1,7 +1,12 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.widget.ImageView;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.qozix.tileview.TileView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +23,17 @@ class Peak {
     private final double latitude;
     private final double longitude;
     private List<StartingPoint> startingPoints;
+    private MapInfo mapInfo;
 
-    public Peak(String name, int height, String range, double latitude, double longitude, List<StartingPoint> startingPoints) {
+    public Peak(String name, int height, String range, double latitude, double longitude, List<StartingPoint> startingPoints,
+                String mapRegex, int width, int mapHeight, double xs, double xe, double ys, double ye) {
         this.name = name;
         this.height = height;
         this.range = range;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startingPoints = startingPoints;
+        this.mapInfo = new MapInfo(mapRegex, width, mapHeight, xs, xe, ys, ye);
     }
 
     public String getName() {
@@ -65,5 +73,29 @@ class Peak {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(getLatLng());
         return new MarkerOptionsWrapper(markerOptions, false);
+    }
+
+    public String getMapRegex() {
+        return mapInfo.getRegex();
+    }
+
+    public void setMapSize(TileView rootView) {
+        mapInfo.setMapSize(rootView);
+    }
+
+    public void addMarkers(TileView rootView) {
+        ImageView imageView = new ImageView(App.getAppContext());
+        Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
+        imageView.setImageDrawable(drawable);
+        rootView.addMarker(imageView, mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude), -0.5f, -1f);
+//        rootView.addMarker(imageView, 1, 1, 0f, 0f);
+    }
+
+    public void addLocationMarker(TileView rootView, Location location) {
+        ImageView imageView = new ImageView(App.getAppContext());
+        Drawable drawable = App.getAppContext().getDrawable(R.drawable.circlesmall);
+        imageView.setImageDrawable(drawable);
+        rootView.addMarker(imageView, mapInfo.lngPosition(location.getLongitude()), mapInfo.latPosition(location.getLatitude())
+                , -0.5f, -0.5f);
     }
 }
