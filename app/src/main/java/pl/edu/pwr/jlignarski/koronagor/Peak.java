@@ -52,8 +52,8 @@ class Peak {
         return startingPoints;
     }
 
-    public List<MarkerOptions> getMapMarkers() {
-        List<MarkerOptions> result = new ArrayList<>();
+    public List<MarkerOptionsWrapper> getMapMarkers() {
+        List<MarkerOptionsWrapper> result = new ArrayList<>();
         result.add(buildMarker());
         for (StartingPoint startingPoint : startingPoints) {
             result.add(startingPoint.buildMarker());
@@ -61,9 +61,9 @@ class Peak {
         return result;
     }
 
-    private MarkerOptions buildMarker() {
+    private MarkerOptionsWrapper buildMarker() {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(getLatLng());
-        return markerOptions;
+        return new MarkerOptionsWrapper(markerOptions, false);
     }
 }

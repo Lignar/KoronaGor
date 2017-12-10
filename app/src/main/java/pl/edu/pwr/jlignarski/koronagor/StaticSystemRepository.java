@@ -25,7 +25,7 @@ class StaticSystemRepository implements SystemRepository {
     @Override
     public List<Peak> getAllPeaks() {
         StartingPoint sp11 = new StartingPoint("Palenica Białczańska", 49.255833, 20.103056, 250);
-        StartingPoint sp12 = new StartingPoint("Morskie Oko", 49.196944, 20.07, 150);
+        StartingPoint sp12 = new StartingPoint("Morskie Oko", 49.201389, 20.071306, 150);
         Peak peak1 = new Peak("Rysy", 2499, "Tatry", 49.179444, 20.088333, Arrays.asList(sp11, sp12));
         StartingPoint sp21 = new StartingPoint("Markowe Szczawino", 49.587778, 19.516667, 90);
         StartingPoint sp22 = new StartingPoint("Kiczory", 49.545278, 19.545278, 220);

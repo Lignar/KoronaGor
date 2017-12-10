@@ -34,11 +34,11 @@ class StartingPoint {
         return reqTime/60 + "h " + reqTime%60 + "m";
     }
 
-    public MarkerOptions buildMarker() {
+    public MarkerOptionsWrapper buildMarker() {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(getLatLng());
         markerOptions.title(name);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-        return markerOptions;
+        return new MarkerOptionsWrapper(markerOptions, true);
     }
 }

@@ -14,6 +14,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -23,6 +25,8 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     private OnPeakMapInteractionListener mListener;
     private GoogleMap map;
     private MapView mapView;
+    private RouteDrawingService routeDrawingService;
+    private Location lastLocation;
 
     public static PeakGoogleMapFragment newInstance(Bundle bundle) {
         PeakGoogleMapFragment peakGoogleMapFragment = new PeakGoogleMapFragment();
@@ -73,10 +77,34 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
 
     private void drawPeakMarkers() {
         Peak peak = RepositoryDelegate.getSystemRepo().getPeakById((String) getArguments().get(BundleKey.PEAK_ID.getKey()));
-        for (MarkerOptions marker : peak.getMapMarkers()) {
-            map.addMarker(marker);
+        for (MarkerOptionsWrapper marker : peak.getMapMarkers()) {
+            marker.addToMap(map);
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(peak.getLatLng(), 11));
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.getTag() != null) {
+                    getRouteDrawingService().drawRoute(getLastLatLng(), (LatLng) marker.getTag());
+                }
+                return false;
+            }
+        });
+    }
+
+    private LatLng getLastLatLng() {
+        LatLng result = null;
+        if (lastLocation != null) {
+            result = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        }
+        return result;
+    }
+
+    private RouteDrawingService getRouteDrawingService() {
+        if (routeDrawingService == null) {
+            routeDrawingService = new RouteDrawingService(map);
+        }
+        return routeDrawingService;
     }
 
     @Override
@@ -108,6 +136,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
+        lastLocation = location;
     }
 
     public interface OnPeakMapInteractionListener {
