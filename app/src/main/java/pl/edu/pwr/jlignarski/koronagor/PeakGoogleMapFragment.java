@@ -16,7 +16,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallback, LocationListener {
@@ -27,6 +26,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     private MapView mapView;
     private RouteDrawingService routeDrawingService;
     private Location lastLocation;
+    private Marker activeMarker;
 
     public static PeakGoogleMapFragment newInstance(Bundle bundle) {
         PeakGoogleMapFragment peakGoogleMapFragment = new PeakGoogleMapFragment();
@@ -84,12 +84,18 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                activeMarker = null;
                 if (marker.getTag() != null) {
-                    getRouteDrawingService().drawRoute(getLastLatLng(), (LatLng) marker.getTag());
+                    redrawRoute(marker);
+                    activeMarker = marker;
                 }
                 return false;
             }
         });
+    }
+
+    private void redrawRoute(Marker marker) {
+        getRouteDrawingService().drawRoute(getLastLatLng(), (LatLng) marker.getTag());
     }
 
     private LatLng getLastLatLng() {
@@ -137,6 +143,10 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
+        if (activeMarker != null) {
+            redrawRoute(activeMarker);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+        }
     }
 
     public interface OnPeakMapInteractionListener {

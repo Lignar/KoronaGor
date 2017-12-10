@@ -31,6 +31,7 @@ import java.util.Set;
 public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "PeakMapActivity";
+    private static final int UPDATE_INTERVAL = 60000;
     private Bundle extras;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -90,8 +91,8 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(120000);
-        locationRequest.setFastestInterval(120000);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(UPDATE_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
