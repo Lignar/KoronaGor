@@ -88,8 +88,19 @@ class Peak {
         ImageView imageView = new ImageView(App.getAppContext());
         Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
         imageView.setImageDrawable(drawable);
-        rootView.addMarker(imageView, mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude), -0.5f, -1f);
-        
+        rootView.addMarker(createMarkerImageView(), mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude), -0.5f, -1f);
+        for (StartingPoint startingPoint : startingPoints) {
+            LatLng latLng = startingPoint.getLatLng();
+            rootView.addMarker(createMarkerImageView(), mapInfo.lngPosition(latLng.longitude), mapInfo.latPosition(latLng.latitude), -0.5f,
+                    -1f);
+        }
+    }
+
+    private View createMarkerImageView() {
+        ImageView imageView = new ImageView(App.getAppContext());
+        Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
+        imageView.setImageDrawable(drawable);
+        return imageView;
     }
 
     public View addLocationMarker(TileView rootView, Location location) {
