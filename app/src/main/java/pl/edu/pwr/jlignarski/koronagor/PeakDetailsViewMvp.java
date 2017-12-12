@@ -14,6 +14,7 @@ class PeakDetailsViewMvp implements MvpView {
     private final View rootView;
     private Button touristButton;
     private Button googleButton;
+    private Button pictureButton;
     private PeakDetailViewListener listener;
 
     public PeakDetailsViewMvp(LayoutInflater inflater, ViewGroup container, Peak peak) {
@@ -24,6 +25,7 @@ class PeakDetailsViewMvp implements MvpView {
     private void init() {
         googleButton = rootView.findViewById(R.id.googleMap);
         touristButton = rootView.findViewById(R.id.touristMap);
+        pictureButton = rootView.findViewById(R.id.peakPicture);
         initListeners();
     }
 
@@ -40,6 +42,12 @@ class PeakDetailsViewMvp implements MvpView {
                 listener.openTouristMap();
             }
         });
+        pictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.takePicture();
+            }
+        });
     }
 
     @Override
@@ -53,6 +61,9 @@ class PeakDetailsViewMvp implements MvpView {
 
     interface PeakDetailViewListener {
         void openGoogleMap();
+
         void openTouristMap();
+
+        void takePicture();
     }
 }

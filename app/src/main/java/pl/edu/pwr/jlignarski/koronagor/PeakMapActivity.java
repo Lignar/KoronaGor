@@ -1,11 +1,16 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +24,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +37,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
 
     private static final String TAG = "PeakMapActivity";
     private static final int UPDATE_INTERVAL = 10000;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location lastLocation;
@@ -144,5 +154,32 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         fragmentTransaction.replace(R.id.peakContainer, peakTouristMapFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, "pl.edu.pwr.jlignarski.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File tempFile = File.createTempFile(timeStamp, ".jpg", storageDir);
+        Log.i(TAG, tempFile.getAbsolutePath());
+        return tempFile;
     }
 }
