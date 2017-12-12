@@ -57,10 +57,6 @@ class Peak {
         return new LatLng(latitude, longitude);
     }
 
-    public List<StartingPoint> getStartingPoints() {
-        return startingPoints;
-    }
-
     public List<MarkerOptionsWrapper> getMapMarkers() {
         List<MarkerOptionsWrapper> result = new ArrayList<>();
         result.add(buildMarker());

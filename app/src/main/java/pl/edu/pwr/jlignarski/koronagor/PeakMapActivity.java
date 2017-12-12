@@ -27,7 +27,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         PeakTouristMapFragment.OnTouristMapInteractionListener, PeakDetailsFragment.OnPeakDetailsInteractionListener {
 
     private static final String TAG = "PeakMapActivity";
-    private static final int UPDATE_INTERVAL = 60000;
+    private static final int UPDATE_INTERVAL = 10000;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location lastLocation;
@@ -55,15 +55,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     }
 
     private Peak getPeakFromBundle() {
-        return RepositoryDelegate.getSystemRepo().getPeakById((String) getIntent().getExtras().get(BundleKey.PEAK_ID.getKey()));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (fusedLocationProviderClient != null) {
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-        }
+        return RepositoryDelegate.getSystemRepo().getPeakById((String) BundleKey.PEAK_ID.fromBundle(getIntent().getExtras()));
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -89,6 +81,15 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
 
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (fusedLocationProviderClient != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+            Log.i(TAG, "removeLocationUpdates");
+        }
+    }
+
     @SuppressLint("MissingPermission")
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -97,6 +98,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         locationRequest.setFastestInterval(UPDATE_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        Log.i(TAG, "requestLocationUpdates");
     }
 
     @Override
@@ -128,7 +130,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
             peakGoogleMapFragment = PeakGoogleMapFragment.newInstance(peak);
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.peakContainer, peakGoogleMapFragment);
+        fragmentTransaction.replace(R.id.peakContainer, peakGoogleMapFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -139,7 +141,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
             peakTouristMapFragment = PeakTouristMapFragment.newInstance(peak);
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.peakContainer, peakTouristMapFragment);
+        fragmentTransaction.replace(R.id.peakContainer, peakTouristMapFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

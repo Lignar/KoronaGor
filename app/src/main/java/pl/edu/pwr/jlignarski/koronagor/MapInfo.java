@@ -37,16 +37,12 @@ class MapInfo {
     }
 
     public double latPosition(double latitude) {
-        Log.i(TAG, latitude + " " + ys + " " + ye);
         double v = ((ys - latitude) / (ys - ye)) * height;
-        Log.i(TAG, Double.toString(v));
         return v;
     }
 
     public double lngPosition(double longitude) {
-        Log.i(TAG, longitude + " " + xs + " " + xe);
         double v = ((longitude - xs) / (xe - xs)) * width;
-        Log.i(TAG, Double.toString(v));
         return v;
     }
 }

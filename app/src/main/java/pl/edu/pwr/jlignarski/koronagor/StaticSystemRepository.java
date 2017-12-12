@@ -1,9 +1,17 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author janusz on 08.12.17.
@@ -11,7 +19,7 @@ import java.util.List;
 
 class StaticSystemRepository implements SystemRepository {
 
-    static StaticSystemRepository instance;
+    private static StaticSystemRepository instance;
 
     private StaticSystemRepository() {
     }
@@ -51,5 +59,39 @@ class StaticSystemRepository implements SystemRepository {
             }
         }
         return result;
+    }
+
+    @Override
+    public void loadMapsToStorage() {
+        BitmapFactory.Options OPTIONS = new BitmapFactory.Options();
+        OPTIONS.inPreferredConfig = Bitmap.Config.RGB_565;
+        AssetManager assetManager = App.getAppContext().getAssets();
+        for (Peak peak : getAllPeaks()) {
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 6; j++) {
+                    String unformattedFileName = peak.getMapRegex();
+                    String formattedFileName = String.format( Locale.US, unformattedFileName, i, j );
+                    try {
+                        InputStream inputStream = assetManager.open( formattedFileName );
+                        if( inputStream != null ) {
+                            try {
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, OPTIONS);
+                                FileOutputStream fos = App.getAppContext().openFileOutput(formattedFileName, Context.MODE_PRIVATE);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
+                                fos.flush();
+                                fos.close();
+                                inputStream.close();
+
+                            } catch( OutOfMemoryError | Exception e ) {
+                                // this is probably an out of memory error - you can try sleeping (this method won't be called in the UI thread) or try again (or give up)
+                            }
+                        }
+                    } catch( Exception e ) {
+                        // this is probably an IOException, meaning the file can't be found
+                    }
+                }
+            }
+
+        }
     }
 }

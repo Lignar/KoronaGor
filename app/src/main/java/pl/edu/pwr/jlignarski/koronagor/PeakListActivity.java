@@ -32,7 +32,7 @@ public class PeakListActivity extends AppCompatActivity implements PeakListViewM
     @Override
     public void onPeakListItemClick(Peak peak) {
         Intent intent = new Intent(this, PeakMapActivity.class);
-        intent.putExtra(BundleKey.PEAK_ID.getKey(), peak.getId());
+        BundleKey.PEAK_ID.addToIntent(intent, peak.getId());
         startActivity(intent);
     }
 }

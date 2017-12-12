@@ -10,4 +10,6 @@ interface SystemRepository {
     List<Peak> getAllPeaks();
 
     Peak getPeakById(String peakId);
+
+    void loadMapsToStorage();
 }

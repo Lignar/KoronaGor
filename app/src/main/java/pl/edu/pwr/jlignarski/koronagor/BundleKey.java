@@ -1,5 +1,8 @@
 package pl.edu.pwr.jlignarski.koronagor;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 /**
  * @author janusz on 09.12.17.
  */
@@ -14,7 +17,11 @@ enum BundleKey {
         this.key = key;
     }
 
-    public String getKey() {
-        return key;
+    public Object fromBundle(Bundle extras) {
+        return extras.get(key);
+    }
+
+    public void addToIntent(Intent intent, String id) {
+        intent.putExtra(key, id);
     }
 }

@@ -32,6 +32,12 @@ class MenuViewMvpImpl implements MenuViewMvp {
                 actionListener.onPeakListButtonClick();
             }
         });
+        rootView.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionListener.loadAssets();
+            }
+        });
     }
 
     @Override

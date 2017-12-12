@@ -17,8 +17,9 @@ class PeakTouristMapViewMvp implements MvpView {
     public PeakTouristMapViewMvp(Peak peak) {
         this.peak = peak;
         this.rootView = new TileView(App.getAppContext());
+        rootView.setBitmapProvider(new BitmapProviderInternalStorage());
         peak.setMapSize(rootView);
-        rootView.addDetailLevel(1f, peak.getMapRegex(), 128, 128);
+        rootView.addDetailLevel(1f, peak, 128, 128);
         rootView.setScaleLimits(0f, 10f);
         peak.addMarkers(rootView);
     }

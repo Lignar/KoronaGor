@@ -21,4 +21,9 @@ public class MenuActivity extends AppCompatActivity implements MenuViewMvp.MenuV
         Intent intent = new Intent(this, PeakListActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void loadAssets() {
+        RepositoryDelegate.getSystemRepo().loadMapsToStorage();
+    }
 }
