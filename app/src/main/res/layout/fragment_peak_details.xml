@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.edu.pwr.jlignarski.koronagor.PeakDetailsFragment">
+    tools:context="pl.edu.pwr.jlignarski.koronagor.presenter.PeakDetailsFragment">
 
     <Button
         android:id="@+id/googleMap"

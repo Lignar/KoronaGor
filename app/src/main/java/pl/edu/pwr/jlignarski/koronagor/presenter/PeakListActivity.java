@@ -1,13 +1,17 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import pl.edu.pwr.jlignarski.koronagor.view.PeakListAdapter;
+import pl.edu.pwr.jlignarski.koronagor.view.PeakListViewMvp;
+import pl.edu.pwr.jlignarski.koronagor.view.PeakListViewMvpImpl;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
+import pl.edu.pwr.jlignarski.koronagor.model.SystemRepository;
 
 public class PeakListActivity extends AppCompatActivity implements PeakListViewMvp.PeakListViewListener {
 

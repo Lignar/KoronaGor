@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import com.google.android.gms.location.LocationListener;
 

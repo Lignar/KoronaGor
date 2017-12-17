@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.model;
 
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -12,11 +12,13 @@ import com.qozix.tileview.TileView;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.pwr.jlignarski.koronagor.R;
+
 /**
  * @author janusz on 08.12.17.
  */
 
-class Peak {
+public class Peak {
 
     private String name;
     private int height;

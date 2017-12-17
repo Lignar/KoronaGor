@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,11 +6,13 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.MapView;
 
+import pl.edu.pwr.jlignarski.koronagor.R;
+
 /**
  * @author janusz on 09.12.17.
  */
 
-class PeakGoogleMapViewMvp implements MvpView {
+public class PeakGoogleMapViewMvp implements MvpView {
 
 
     private final View rootView;

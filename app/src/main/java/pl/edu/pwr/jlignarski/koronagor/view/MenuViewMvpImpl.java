@@ -1,15 +1,17 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import pl.edu.pwr.jlignarski.koronagor.R;
+
 /**
  * @author janusz on 08.12.17.
  */
 
-class MenuViewMvpImpl implements MenuViewMvp {
+public class MenuViewMvpImpl implements MenuViewMvp {
 
     private View rootView;
     private Button peakListButton;

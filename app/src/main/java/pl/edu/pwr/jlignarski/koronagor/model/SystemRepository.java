@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.model;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * @author janusz on 08.12.17.
  */
 
-interface SystemRepository {
+public interface SystemRepository {
     List<Peak> getAllPeaks();
 
     Peak getPeakById(String peakId);

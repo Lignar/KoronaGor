@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -31,12 +31,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import pl.edu.pwr.jlignarski.koronagor.R;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
+
 public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         PeakTouristMapFragment.OnTouristMapInteractionListener, PeakDetailsFragment.OnPeakDetailsInteractionListener {
 
     private static final String TAG = "PeakMapActivity";
-    private static final int UPDATE_INTERVAL = 10000;
+    private static final int UPDATE_INTERVAL = 60000;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;

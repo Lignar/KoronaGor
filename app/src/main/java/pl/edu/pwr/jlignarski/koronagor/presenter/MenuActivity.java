@@ -1,8 +1,12 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import pl.edu.pwr.jlignarski.koronagor.view.MenuViewMvp;
+import pl.edu.pwr.jlignarski.koronagor.view.MenuViewMvpImpl;
+import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
 
 public class MenuActivity extends AppCompatActivity implements MenuViewMvp.MenuViewListener {
 

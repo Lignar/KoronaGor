@@ -1,15 +1,19 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.view;
 
 import android.location.Location;
 import android.view.View;
 
 import com.qozix.tileview.TileView;
 
+import pl.edu.pwr.jlignarski.koronagor.model.App;
+import pl.edu.pwr.jlignarski.koronagor.model.BitmapProviderInternalStorage;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+
 /**
  * @author janusz on 10.12.17.
  */
 
-class PeakTouristMapViewMvp implements MvpView {
+public class PeakTouristMapViewMvp implements MvpView {
 
     private final TileView rootView;
     private Peak peak;

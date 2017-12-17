@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;

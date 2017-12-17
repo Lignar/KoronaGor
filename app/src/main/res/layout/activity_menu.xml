@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.edu.pwr.jlignarski.koronagor.MenuActivity">
+    tools:context="pl.edu.pwr.jlignarski.koronagor.presenter.MenuActivity">
 
     <Button
         android:id="@+id/peak_list_button"

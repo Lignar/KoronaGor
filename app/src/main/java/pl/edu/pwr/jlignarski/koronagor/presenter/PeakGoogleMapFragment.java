@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +15,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+
+import pl.edu.pwr.jlignarski.koronagor.view.PeakGoogleMapViewMvp;
+import pl.edu.pwr.jlignarski.koronagor.model.MarkerOptionsWrapper;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+import pl.edu.pwr.jlignarski.koronagor.model.RouteDrawingService;
 
 
 public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallback, LocationListener {

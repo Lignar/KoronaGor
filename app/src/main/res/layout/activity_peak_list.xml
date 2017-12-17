@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.edu.pwr.jlignarski.koronagor.PeakListActivity">
+    tools:context="pl.edu.pwr.jlignarski.koronagor.presenter.PeakListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/peak_list_view"

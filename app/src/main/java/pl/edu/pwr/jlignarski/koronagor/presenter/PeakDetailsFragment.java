@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import pl.edu.pwr.jlignarski.koronagor.view.PeakDetailsViewMvp;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 
 public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.PeakDetailViewListener {
 

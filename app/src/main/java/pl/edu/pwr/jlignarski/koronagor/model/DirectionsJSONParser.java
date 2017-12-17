@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.model;
 
 import com.google.android.gms.maps.model.LatLng;
 

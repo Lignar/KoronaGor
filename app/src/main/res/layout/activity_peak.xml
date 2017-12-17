@@ -5,6 +5,6 @@
     android:id="@+id/peakContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.edu.pwr.jlignarski.koronagor.PeakMapActivity">
+    tools:context="pl.edu.pwr.jlignarski.koronagor.presenter.PeakMapActivity">
 
 </android.support.constraint.ConstraintLayout>

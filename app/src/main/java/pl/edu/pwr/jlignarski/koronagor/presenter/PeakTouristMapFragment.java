@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.content.Context;
 import android.location.Location;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.location.LocationListener;
+
+import pl.edu.pwr.jlignarski.koronagor.view.PeakTouristMapViewMvp;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 
 public class PeakTouristMapFragment extends Fragment implements LocationListener {
 

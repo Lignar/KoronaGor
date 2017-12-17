@@ -1,15 +1,18 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import pl.edu.pwr.jlignarski.koronagor.R;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+
 /**
  * @author janusz on 11.12.17.
  */
 
-class PeakDetailsViewMvp implements MvpView {
+public class PeakDetailsViewMvp implements MvpView {
 
     private final View rootView;
     private Button touristButton;
@@ -59,7 +62,7 @@ class PeakDetailsViewMvp implements MvpView {
         this.listener = listener;
     }
 
-    interface PeakDetailViewListener {
+    public interface PeakDetailViewListener {
         void openGoogleMap();
 
         void openTouristMap();

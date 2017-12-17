@@ -1,10 +1,10 @@
-package pl.edu.pwr.jlignarski.koronagor;
+package pl.edu.pwr.jlignarski.koronagor.model;
 
 /**
  * @author janusz on 08.12.17.
  */
 
-abstract class RepositoryDelegate {
+public abstract class RepositoryDelegate {
 
     public static SystemRepository getSystemRepo() {
         return StaticSystemRepository.getInstance();
