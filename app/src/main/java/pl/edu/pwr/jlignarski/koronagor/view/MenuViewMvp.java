@@ -10,6 +10,8 @@ public interface MenuViewMvp extends MvpView {
         void onPeakListButtonClick();
 
         void loadAssets();
+
+        void updateDatabase();
     }
 
     void attachListener(MenuViewListener listener);
