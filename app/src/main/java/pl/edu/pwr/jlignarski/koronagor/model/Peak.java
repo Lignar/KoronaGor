@@ -27,16 +27,22 @@ public class Peak {
     private final double longitude;
     private List<StartingPoint> startingPoints;
     private MapInfo mapInfo;
+    private boolean completed;
 
     public Peak(String name, int height, String range, double latitude, double longitude, List<StartingPoint> startingPoints,
-                String mapRegex, int width, int mapHeight, double xs, double xe, double ys, double ye) {
+                String mapRegex, int width, int mapHeight, double xs, double xe, double ys, double ye, boolean completed) {
         this.name = name;
         this.height = height;
         this.range = range;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startingPoints = startingPoints;
+        this.completed = completed;
         this.mapInfo = new MapInfo(mapRegex, width, mapHeight, xs, xe, ys, ye);
+    }
+
+    public Peak(String name, int height, String range) {
+        this(name, height, range, 0, 0, new ArrayList<StartingPoint>(), "", 0, 0, 0, 0, 0, 0, false);
     }
 
     public String getName() {
@@ -108,5 +114,9 @@ public class Peak {
         return rootView.addMarker(imageView, mapInfo.lngPosition(location.getLongitude()), mapInfo.latPosition(location
                         .getLatitude())
                 , -0.5f, -0.5f);
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 }

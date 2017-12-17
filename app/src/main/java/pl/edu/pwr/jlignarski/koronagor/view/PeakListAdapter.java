@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -60,6 +61,9 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
         holder.setName(peak.getName());
         holder.setHeight(peak.getHeight());
         holder.setRange(peak.getRange());
+        if (!peak.isCompleted()) {
+            holder.setNotCompleted();
+        }
         if (position % 2 == 1) {
             holder.setBackgroundColor(Color.LTGRAY);
         }
@@ -77,6 +81,7 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
         private TextView range;
         private TextView height;
         private TextView name;
+        private CheckBox completed;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -84,6 +89,7 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
             name = itemView.findViewById(R.id.peakName);
             height = itemView.findViewById(R.id.peakHeight);
             range = itemView.findViewById(R.id.peakRange);
+            completed = itemView.findViewById(R.id.completed);
         }
 
         public void setRange(String range) {
@@ -101,6 +107,10 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
 
         public void setBackgroundColor(int color) {
             rootView.setBackgroundColor(color);
+        }
+
+        public void setNotCompleted() {
+            completed.setVisibility(View.GONE);
         }
     }
 }
