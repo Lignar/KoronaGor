@@ -89,28 +89,24 @@ public class Peak {
     }
 
     public void addMarkers(TileView rootView) {
-        ImageView imageView = new ImageView(App.getAppContext());
-        Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
-        imageView.setImageDrawable(drawable);
-        rootView.addMarker(createMarkerImageView(), mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude), -0.5f, -1f);
+        rootView.addMarker(createMarkerImageView(R.drawable.markergreen), mapInfo.lngPosition(longitude), mapInfo.latPosition
+                (latitude), -0.5f, -1f);
         for (StartingPoint startingPoint : startingPoints) {
             LatLng latLng = startingPoint.getLatLng();
-            rootView.addMarker(createMarkerImageView(), mapInfo.lngPosition(latLng.longitude), mapInfo.latPosition(latLng.latitude), -0.5f,
+            rootView.addMarker(createMarkerImageView(R.drawable.marker), mapInfo.lngPosition(latLng.longitude), mapInfo.latPosition(latLng.latitude), -0.5f,
                     -1f);
         }
     }
 
-    private View createMarkerImageView() {
+    private ImageView createMarkerImageView(int marker) {
         ImageView imageView = new ImageView(App.getAppContext());
-        Drawable drawable = App.getAppContext().getDrawable(R.drawable.marker);
+        Drawable drawable = App.getAppContext().getDrawable(marker);
         imageView.setImageDrawable(drawable);
         return imageView;
     }
 
     public View addLocationMarker(TileView rootView, Location location) {
-        ImageView imageView = new ImageView(App.getAppContext());
-        Drawable drawable = App.getAppContext().getDrawable(R.drawable.circlesmall);
-        imageView.setImageDrawable(drawable);
+        ImageView imageView = createMarkerImageView(R.drawable.circlesmall);
         return rootView.addMarker(imageView, mapInfo.lngPosition(location.getLongitude()), mapInfo.latPosition(location
                         .getLatitude())
                 , -0.5f, -0.5f);
