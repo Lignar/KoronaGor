@@ -21,7 +21,11 @@ public class PeakDetailsViewMvp implements MvpView {
     private PeakDetailViewListener listener;
 
     public PeakDetailsViewMvp(LayoutInflater inflater, ViewGroup container, Peak peak) {
-        rootView = inflater.inflate(R.layout.fragment_peak_details, container, false);
+        if(peak.getName().equals("Rysy")) {
+            rootView = inflater.inflate(R.layout.fragment_peak_details, container, false);
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_peak_details_complete, container, false);
+        }
         init();
     }
 
