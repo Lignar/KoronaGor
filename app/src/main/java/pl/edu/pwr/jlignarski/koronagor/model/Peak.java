@@ -20,6 +20,7 @@ import pl.edu.pwr.jlignarski.koronagor.R;
 
 public class Peak {
 
+    private int id;
     private String name;
     private int height;
     private String range;
@@ -27,22 +28,24 @@ public class Peak {
     private final double longitude;
     private List<StartingPoint> startingPoints;
     private MapInfo mapInfo;
-    private boolean completed;
+    private Conquest conquest;
 
-    public Peak(String name, int height, String range, double latitude, double longitude, List<StartingPoint> startingPoints,
+    public Peak(int id, String name, int height, String range, double latitude, double longitude, List<StartingPoint>
+            startingPoints,
                 String mapRegex, int width, int mapHeight, double xs, double xe, double ys, double ye, boolean completed) {
+        this.id = id;
         this.name = name;
         this.height = height;
         this.range = range;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startingPoints = startingPoints;
-        this.completed = completed;
         this.mapInfo = new MapInfo(mapRegex, width, mapHeight, xs, xe, ys, ye);
+        conquest = RepositoryDelegate.getUserRepo().getConquestByPeakId(getId());
     }
 
-    public Peak(String name, int height, String range) {
-        this(name, height, range, 0, 0, new ArrayList<StartingPoint>(), "", 0, 0, 0, 0, 0, 0, false);
+    public Peak(int id, String name, int height, String range) {
+        this(id, name, height, range, 0, 0, new ArrayList<StartingPoint>(), "", 0, 0, 0, 0, 0, 0, false);
     }
 
     public String getName() {
@@ -57,8 +60,8 @@ public class Peak {
         return range;
     }
 
-    public String getId() {
-        return name;
+    public int getId() {
+        return id;
     }
 
     public LatLng getLatLng() {
@@ -113,6 +116,6 @@ public class Peak {
     }
 
     public boolean isCompleted() {
-        return completed;
+        return conquest.isCompleted();
     }
 }

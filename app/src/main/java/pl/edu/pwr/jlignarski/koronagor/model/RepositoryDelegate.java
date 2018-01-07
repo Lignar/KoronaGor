@@ -10,4 +10,7 @@ public abstract class RepositoryDelegate {
         return StaticSystemRepository.getInstance();
     }
 
+    public static UserRepository getUserRepo() {
+        return StaticUserRepository.getInstance();
+    }
 }

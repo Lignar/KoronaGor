@@ -69,7 +69,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     }
 
     private Peak getPeakFromBundle() {
-        return RepositoryDelegate.getSystemRepo().getPeakById((String) BundleKey.PEAK_ID.fromBundle(getIntent().getExtras()));
+        return RepositoryDelegate.getSystemRepo().getPeakById((int) BundleKey.PEAK_ID.fromBundle(getIntent().getExtras()));
     }
 
     protected synchronized void buildGoogleApiClient() {

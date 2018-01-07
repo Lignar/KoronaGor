@@ -9,7 +9,7 @@ import java.util.List;
 public interface SystemRepository {
     List<Peak> getAllPeaks();
 
-    Peak getPeakById(String peakId);
+    Peak getPeakById(int peakId);
 
     void loadMapsToStorage();
 }

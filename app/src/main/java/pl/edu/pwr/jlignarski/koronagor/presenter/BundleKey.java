@@ -21,7 +21,7 @@ enum BundleKey {
         return extras.get(key);
     }
 
-    public void addToIntent(Intent intent, String id) {
+    public void addToIntent(Intent intent, int id) {
         intent.putExtra(key, id);
     }
 }
