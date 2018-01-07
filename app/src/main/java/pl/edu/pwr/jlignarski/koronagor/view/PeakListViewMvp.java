@@ -11,7 +11,7 @@ import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 public interface PeakListViewMvp extends MvpView {
 
     interface PeakListViewListener {
-        void onPeakListItemClick(Peak peak);
+        void onPeakListItemClick(int peakId);
     }
 
     void setAdapter(RecyclerView.Adapter adapter);

@@ -24,35 +24,18 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
 
     private final Context context;
     private final List<Peak> peakList;
-    private PeakListViewMvp.PeakListViewListener listener;
     private ViewGroup parentView;
-    private View.OnClickListener onClickListener;
 
     public PeakListAdapter(Context context, List<Peak> peakList, PeakListViewMvp.PeakListViewListener listener) {
         this.context = context;
         this.peakList = peakList;
-        this.listener = listener;
+        ViewHolder.setListener(listener);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.peak_list_item, parent, false);
-        view.setOnClickListener(getOnClickListener(parent));
         return new ViewHolder(view);
-    }
-
-    @NonNull
-    private View.OnClickListener getOnClickListener(ViewGroup parent) {
-        if (onClickListener == null || !parent.equals(parentView)) {
-            parentView = parent;
-            onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onPeakListItemClick(peakList.get(parentView.indexOfChild(view)));
-                }
-            };
-        }
-        return onClickListener;
     }
 
     @Override
@@ -61,6 +44,7 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
         holder.setName(peak.getName());
         holder.setHeight(peak.getHeight());
         holder.setRange(peak.getRange());
+        holder.setPeakId(peak.getId());
         if (!peak.isCompleted()) {
             holder.setNotCompleted();
         }
@@ -77,11 +61,14 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private static final String OVER_SEA_LEVEL = "m n.p.m.";
+        private View.OnClickListener onClickListener;
+        private static PeakListViewMvp.PeakListViewListener listener;
         private View rootView;
         private TextView range;
         private TextView height;
         private TextView name;
         private CheckBox completed;
+        private int peakId;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -90,6 +77,11 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
             height = itemView.findViewById(R.id.peakHeight);
             range = itemView.findViewById(R.id.peakRange);
             completed = itemView.findViewById(R.id.completed);
+            rootView.setOnClickListener(getOnClickListener());
+        }
+
+        public static void setListener(PeakListViewMvp.PeakListViewListener listener) {
+            ViewHolder.listener = listener;
         }
 
         public void setRange(String range) {
@@ -111,6 +103,24 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
 
         public void setNotCompleted() {
             completed.setVisibility(View.GONE);
+        }
+
+        @NonNull
+        private View.OnClickListener getOnClickListener() {
+            if (onClickListener == null) {
+                onClickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onPeakListItemClick(peakId);
+
+                    }
+                };
+            }
+            return onClickListener;
+        }
+
+        public void setPeakId(int peakId) {
+            this.peakId = peakId;
         }
     }
 }
