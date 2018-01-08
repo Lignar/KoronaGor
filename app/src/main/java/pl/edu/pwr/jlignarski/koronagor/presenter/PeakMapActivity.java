@@ -114,12 +114,13 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     public void showPicture() {
         if (!peak.hasPhoto()) {
             Toast.makeText(this, "Nie przypisano zdjęcia!", Toast.LENGTH_LONG).show();
+        } else {
+            Fragment photoFragment = PhotoFragment.newInstance(peak.getPhoto());
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.peakContainer, photoFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
-        Fragment photoFragment = PhotoFragment.newInstance(peak.getPhoto());
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.peakContainer, photoFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -133,6 +134,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             BitmapProviderInternalStorage.saveBitmap(imageBitmap, String.format(peak.getMapRegex(), -1, -1));
+            peak.photoAdded();
         }
     }
 }

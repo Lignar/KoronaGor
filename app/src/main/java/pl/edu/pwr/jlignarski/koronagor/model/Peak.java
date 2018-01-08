@@ -76,6 +76,7 @@ public class Peak {
         for (StartingPoint startingPoint : startingPoints) {
             result.add(startingPoint.buildMarker());
         }
+        result.add(conquest.buildMarker());
         return result;
     }
 
@@ -163,5 +164,9 @@ public class Peak {
 
     public Bitmap getPhoto() {
         return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), -1, -1));
+    }
+
+    public void photoAdded() {
+        conquest.photoAdded();
     }
 }

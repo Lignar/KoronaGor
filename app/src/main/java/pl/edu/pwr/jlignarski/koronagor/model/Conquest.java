@@ -1,10 +1,13 @@
 package pl.edu.pwr.jlignarski.koronagor.model;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,5 +66,21 @@ class Conquest {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         conqueredDate = format.format(Calendar.getInstance().getTime());
         this.validated = verified;
+    }
+
+    public void photoAdded() {
+        Location lastLocation = LocationService.getInstance().getLastLocation();
+        if (lastLocation != null) {
+            photoPosition = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        } else {
+            photoPosition = new LatLng(0, 0);
+        }
+    }
+
+    public MarkerOptionsWrapper buildMarker() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(photoPosition);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+        return new MarkerOptionsWrapper(markerOptions, true);
     }
 }
