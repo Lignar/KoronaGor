@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import com.qozix.tileview.graphics.BitmapProvider;
 import com.qozix.tileview.tiles.Tile;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
@@ -27,19 +29,37 @@ public class BitmapProviderInternalStorage implements BitmapProvider {
         if( data instanceof Peak ) {
             String mapRegex = ((Peak) data).getMapRegex();
             String tileName = String.format(mapRegex, tile.getColumn(), tile.getRow() );
-            try {
-                InputStream inputStream = context.openFileInput(tileName);
-                if( inputStream != null ) {
-                    try {
-                        result = BitmapFactory.decodeStream( inputStream, null, FACTORY_OPTIONS);
-                    } catch( OutOfMemoryError | Exception e ) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch( Exception e ) {
-                e.printStackTrace();
-            }
+            result = getBitmap(context, tileName);
         }
         return result;
+    }
+
+    public static Bitmap getBitmap(Context context, String fileName) {
+        Bitmap result = null;
+        try {
+            InputStream inputStream = context.openFileInput(fileName);
+            if( inputStream != null ) {
+                try {
+                    result = BitmapFactory.decodeStream( inputStream, null, FACTORY_OPTIONS);
+                } catch( OutOfMemoryError | Exception e ) {
+                    e.printStackTrace();
+                }
+            }
+        } catch( Exception e ) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void saveBitmap(Bitmap bitmap, String formattedFileName) {
+        FileOutputStream fos = null;
+        try {
+            fos = App.getAppContext().openFileOutput(formattedFileName, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
+            fos.flush();
+            fos.close();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 }

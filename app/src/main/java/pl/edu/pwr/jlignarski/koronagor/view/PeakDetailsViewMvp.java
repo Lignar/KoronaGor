@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
+import pl.edu.pwr.jlignarski.koronagor.model.BitmapProviderInternalStorage;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 
 /**
@@ -52,7 +54,7 @@ public class PeakDetailsViewMvp implements MvpView {
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.interactWithPicture();
+                listener.takePicture();
             }
         });
         additionalButton.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +72,7 @@ public class PeakDetailsViewMvp implements MvpView {
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.takePicture();
+                listener.interactWithPicture();
             }
         });
         additionalButton.setOnClickListener(new View.OnClickListener() {
@@ -85,10 +87,12 @@ public class PeakDetailsViewMvp implements MvpView {
         TextView peakName = rootView.findViewById(R.id.peakName);
         TextView peakHeight = rootView.findViewById(R.id.peakDetailsHeight);
         TextView range = rootView.findViewById(R.id.peakDetailsRange);
+        ImageView peakThumbnail = rootView.findViewById(R.id.peakThumbnail);
         googleButton = rootView.findViewById(R.id.googleMap);
         touristButton = rootView.findViewById(R.id.touristMap);
         pictureButton = rootView.findViewById(R.id.peakPicture);
         additionalButton = rootView.findViewById(R.id.peakDetailsAdditionalButton);
+        peakThumbnail.setImageBitmap(peak.getThumbnail());
         peakName.setText(peak.getName());
         peakHeight.setText(peak.getHeight() + "m n.p.m.");
         range.setText(peak.getRange());

@@ -2,6 +2,7 @@ package pl.edu.pwr.jlignarski.koronagor.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
@@ -9,11 +10,13 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +35,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
+import pl.edu.pwr.jlignarski.koronagor.model.BitmapProviderInternalStorage;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
 
@@ -55,6 +59,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_peak);
+        getSupportActionBar().hide();
         peak = getPeakFromBundle();
         createPeakDetailsFragment();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -64,7 +69,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     private void createPeakDetailsFragment() {
         PeakDetailsFragment peakDetailsFragment = PeakDetailsFragment.newInstance(peak);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.peakContainer, peakDetailsFragment);
+        fragmentTransaction.replace(R.id.peakContainer, peakDetailsFragment);
         fragmentTransaction.commit();
     }
 
@@ -163,27 +168,35 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     @Override
     public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "pl.edu.pwr.jlignarski.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File tempFile = File.createTempFile(timeStamp, ".jpg", storageDir);
-        Log.i(TAG, tempFile.getAbsolutePath());
-        return tempFile;
+    @Override
+    public void markConquered() {
+        peak.conquer(lastLocation);
+        createPeakDetailsFragment();
+    }
+
+    @Override
+    public void showPicture() {
+        if (!peak.hasPhoto()) {
+            Toast.makeText(this, "Nie przypisano zdjęcia!", Toast.LENGTH_LONG).show();
+        }
+        Fragment photoFragment = PhotoFragment.newInstance(peak.getPhoto());
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.peakContainer, photoFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            BitmapProviderInternalStorage.saveBitmap(imageBitmap, String.format(peak.getMapRegex(), -1, -1));
+        }
     }
 }

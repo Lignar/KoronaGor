@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * @author janusz on 07.01.18.
  */
@@ -51,7 +54,14 @@ class Conquest {
         }
     }
 
-    private boolean hasPhoto() {
+    boolean hasPhoto() {
         return photoPosition != null;
+    }
+
+    public void conquer(boolean verified) {
+        completed = true;
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        conqueredDate = format.format(Calendar.getInstance().getTime());
+        this.validated = verified;
     }
 }

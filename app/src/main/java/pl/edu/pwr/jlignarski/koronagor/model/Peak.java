@@ -1,5 +1,6 @@
 package pl.edu.pwr.jlignarski.koronagor.model;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.View;
@@ -138,5 +139,29 @@ public class Peak {
 
     public void setPhotoText(TextView photoText) {
         conquest.setPhotoText(photoText);
+    }
+
+    public void conquer(Location lastLocation) {
+        conquest.conquer(verifyLocation(lastLocation));
+    }
+
+    private boolean verifyLocation(Location lastLocation) {
+        Location peakLocation = new Location("peak");
+        peakLocation.setLatitude(latitude);
+        peakLocation.setLongitude(longitude);
+        return (lastLocation != null &&
+                lastLocation.distanceTo(peakLocation) < 500);
+    }
+
+    public boolean hasPhoto() {
+        return conquest.hasPhoto();
+    }
+
+    public Bitmap getThumbnail() {
+        return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), -2, -2));
+    }
+
+    public Bitmap getPhoto() {
+        return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), -1, -1));
     }
 }
