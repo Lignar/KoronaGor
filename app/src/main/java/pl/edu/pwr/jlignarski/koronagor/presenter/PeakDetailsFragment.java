@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import pl.edu.pwr.jlignarski.koronagor.view.PeakDetailsViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+import pl.edu.pwr.jlignarski.koronagor.view.StartingPointListAdapter;
 
 public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.PeakDetailViewListener {
 
@@ -28,8 +29,12 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        PeakDetailsViewMvp peakDetailsView = new PeakDetailsViewMvp(inflater, container, peak);
+        PeakDetailsViewMvp peakDetailsView = new PeakDetailsViewMvp(getContext(), inflater, container, peak);
         peakDetailsView.attachListener(this);
+        if (!peak.isCompleted()) {
+            StartingPointListAdapter listAdapter = new StartingPointListAdapter(peak.getStartingPoints());
+            peakDetailsView.setAdapter(listAdapter);
+        }
         return peakDetailsView.getRootView();
     }
 

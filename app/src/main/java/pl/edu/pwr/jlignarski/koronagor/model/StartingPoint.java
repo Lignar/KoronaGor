@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * @author janusz on 09.12.17.
  */
 
-class StartingPoint {
+public class StartingPoint {
     private final String name;
     private final double latitude;
     private final double longitude;

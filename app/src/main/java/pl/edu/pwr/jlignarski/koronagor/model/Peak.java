@@ -118,4 +118,8 @@ public class Peak {
     public boolean isCompleted() {
         return conquest.isCompleted();
     }
+
+    public List<StartingPoint> getStartingPoints() {
+        return startingPoints;
+    }
 }

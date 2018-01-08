@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/peakHeight"
+        android:id="@+id/startingPointTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="18dp"
@@ -44,6 +44,6 @@
         android:layout_marginTop="16dp"
         android:checked="true"
         android:clickable="false"
-        app:layout_constraintEnd_toEndOf="@+id/peakHeight"
-        app:layout_constraintTop_toBottomOf="@+id/peakHeight" />
+        app:layout_constraintEnd_toEndOf="@+id/startingPointTime"
+        app:layout_constraintTop_toBottomOf="@+id/startingPointTime" />
 </android.support.constraint.ConstraintLayout>

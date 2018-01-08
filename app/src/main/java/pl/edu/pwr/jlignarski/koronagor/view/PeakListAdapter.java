@@ -24,7 +24,6 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
 
     private final Context context;
     private final List<Peak> peakList;
-    private ViewGroup parentView;
 
     public PeakListAdapter(Context context, List<Peak> peakList, PeakListViewMvp.PeakListViewListener listener) {
         this.context = context;
@@ -74,7 +73,7 @@ public class PeakListAdapter extends RecyclerView.Adapter<PeakListAdapter.ViewHo
             super(itemView);
             rootView = itemView;
             name = itemView.findViewById(R.id.peakName);
-            height = itemView.findViewById(R.id.peakHeight);
+            height = itemView.findViewById(R.id.startingPointTime);
             range = itemView.findViewById(R.id.peakRange);
             completed = itemView.findViewById(R.id.completed);
             rootView.setOnClickListener(getOnClickListener());
