@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.location.LocationListener;
 
+import pl.edu.pwr.jlignarski.koronagor.model.LocationService;
 import pl.edu.pwr.jlignarski.koronagor.view.PeakTouristMapViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 
@@ -28,7 +29,7 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         peakTouristMapView = new PeakTouristMapViewMvp(peak);
-        mListener.registerLocationObserver(this);
+        LocationService.getInstance().registerLocationObserver(this);
         return peakTouristMapView.getRootView();
     }
 
@@ -46,13 +47,13 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
     @Override
     public void onPause() {
         super.onPause();
-        mListener.unregisterLocationObserver(this);
+        LocationService.getInstance().unregisterLocationObserver(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mListener.registerLocationObserver(this);
+        LocationService.getInstance().registerLocationObserver(this);
     }
 
     @Override
@@ -79,6 +80,6 @@ public class PeakTouristMapFragment extends Fragment implements LocationListener
         lastLocationMarker = peakTouristMapView.addLocationMarker(location);
     }
 
-    public interface OnTouristMapInteractionListener extends LocationObserverManager {
+    public interface OnTouristMapInteractionListener {
     }
 }

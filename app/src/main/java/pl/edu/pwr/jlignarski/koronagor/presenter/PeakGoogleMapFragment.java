@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import pl.edu.pwr.jlignarski.koronagor.model.LocationService;
 import pl.edu.pwr.jlignarski.koronagor.view.PeakGoogleMapViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.model.MarkerOptionsWrapper;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
@@ -74,7 +75,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         map = googleMap;
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.setMyLocationEnabled(true);
-        mListener.registerLocationObserver(this);
+        LocationService.getInstance().registerLocationObserver(this);
         drawPeakMarkers();
     }
 
@@ -119,7 +120,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     public void onResume() {
         peakGoogleMapView.getMap().onResume();
         super.onResume();
-        mListener.registerLocationObserver(this);
+        LocationService.getInstance().registerLocationObserver(this);
     }
 
 
@@ -127,7 +128,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     public void onPause() {
         super.onPause();
         peakGoogleMapView.getMap().onPause();
-        mListener.unregisterLocationObserver(this);
+        LocationService.getInstance().unregisterLocationObserver(this);
     }
 
     @Override
@@ -155,7 +156,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         this.peak = peak;
     }
 
-    public interface OnPeakMapInteractionListener extends LocationObserverManager{
+    public interface OnPeakMapInteractionListener {
 
     }
 }

@@ -95,6 +95,11 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
         }
     }
 
+    @Override
+    public void toggleTripRecording() {
+        mListener.toggleTripRecording();
+    }
+
     private void showPictureDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Istnieje zdjęcie");
@@ -122,5 +127,7 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
         void markConquered();
 
         void showPicture();
+
+        void toggleTripRecording();
     }
 }

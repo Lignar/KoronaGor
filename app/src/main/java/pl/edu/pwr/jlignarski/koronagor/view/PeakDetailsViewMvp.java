@@ -28,6 +28,7 @@ public class PeakDetailsViewMvp implements MvpView {
     private PeakDetailViewListener listener;
     private RecyclerView startingPointList;
     private Button additionalButton;
+    private TextView peakName;
 
     public PeakDetailsViewMvp(Context context, LayoutInflater inflater, ViewGroup container, Peak peak) {
         this.context = context;
@@ -84,7 +85,7 @@ public class PeakDetailsViewMvp implements MvpView {
     }
 
     private void init(Peak peak) {
-        TextView peakName = rootView.findViewById(R.id.peakName);
+        peakName = rootView.findViewById(R.id.peakName);
         TextView peakHeight = rootView.findViewById(R.id.peakDetailsHeight);
         TextView range = rootView.findViewById(R.id.peakDetailsRange);
         ImageView peakThumbnail = rootView.findViewById(R.id.peakThumbnail);
@@ -110,6 +111,13 @@ public class PeakDetailsViewMvp implements MvpView {
             @Override
             public void onClick(View view) {
                 listener.openTouristMap();
+            }
+        });
+        peakName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.toggleTripRecording();
+                return true;
             }
         });
     }
@@ -139,5 +147,7 @@ public class PeakDetailsViewMvp implements MvpView {
         void showPicture();
 
         void interactWithPicture();
+
+        void toggleTripRecording();
     }
 }

@@ -36,21 +36,14 @@ import java.util.Set;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
 import pl.edu.pwr.jlignarski.koronagor.model.BitmapProviderInternalStorage;
+import pl.edu.pwr.jlignarski.koronagor.model.LocationService;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
 
 public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapFragment.OnPeakMapInteractionListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         PeakTouristMapFragment.OnTouristMapInteractionListener, PeakDetailsFragment.OnPeakDetailsInteractionListener {
 
-    private static final String TAG = "PeakMapActivity";
-    private static final int UPDATE_INTERVAL = 60000;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private GoogleApiClient googleApiClient;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private Location lastLocation;
-    private LocationRequest locationRequest;
-    private Set<LocationListener> locationObservers = new HashSet<>();
     private Peak peak;
     private PeakGoogleMapFragment peakGoogleMapFragment;
     private PeakTouristMapFragment peakTouristMapFragment;
@@ -62,8 +55,6 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         getSupportActionBar().hide();
         peak = getPeakFromBundle();
         createPeakDetailsFragment();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        buildGoogleApiClient();
     }
 
     private void createPeakDetailsFragment() {
@@ -77,70 +68,10 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         return RepositoryDelegate.getSystemRepo().getPeakById((int) BundleKey.PEAK_ID.fromBundle(getIntent().getExtras()));
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
-    }
-
-    LocationCallback locationCallback = new LocationCallback(){
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            for (Location location : locationResult.getLocations()) {
-                Log.i(TAG, "Location: " + location.getLatitude() + " " + location.getLongitude());
-                lastLocation = location;
-            }
-            for (LocationListener observer : locationObservers) {
-                observer.onLocationChanged(lastLocation);
-            }
-        }
-
-    };
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (fusedLocationProviderClient != null) {
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-            Log.i(TAG, "removeLocationUpdates");
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(UPDATE_INTERVAL);
-        locationRequest.setFastestInterval(UPDATE_INTERVAL);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-        Log.i(TAG, "requestLocationUpdates");
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, connectionResult.toString());
-    }
-
-    @Override
-    public void registerLocationObserver(LocationListener listener) {
-        if (lastLocation != null) {
-            listener.onLocationChanged(lastLocation);
-        }
-        locationObservers.add(listener);
-    }
-
-    @Override
-    public void unregisterLocationObserver(LocationListener listener) {
-        locationObservers.remove(listener);
+        LocationService.getInstance().clearObservers();
     }
 
     @Override
@@ -175,7 +106,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
 
     @Override
     public void markConquered() {
-        peak.conquer(lastLocation);
+        peak.conquer(LocationService.getInstance().getLastLocation());
         createPeakDetailsFragment();
     }
 
@@ -189,6 +120,11 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         fragmentTransaction.replace(R.id.peakContainer, photoFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void toggleTripRecording() {
+
     }
 
     @Override
