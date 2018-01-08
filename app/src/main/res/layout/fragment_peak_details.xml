@@ -51,7 +51,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:text="Mapa Turystyczna"
-        app:layout_constraintBottom_toTopOf="@+id/markConqueredButton"
+        app:layout_constraintBottom_toTopOf="@+id/peakDetailsAdditionalButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/vguideline" />
 
@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/googleMap"
         app:layout_constraintStart_toStartOf="@+id/googleMap"
-        app:layout_constraintTop_toTopOf="@+id/markConqueredButton" />
+        app:layout_constraintTop_toTopOf="@+id/peakDetailsAdditionalButton" />
 
     <android.support.constraint.Guideline
         android:id="@+id/vguideline"
@@ -74,7 +74,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/markConqueredButton"
+        android:id="@+id/peakDetailsAdditionalButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
@@ -24,33 +25,73 @@ public class PeakDetailsViewMvp implements MvpView {
     private Button pictureButton;
     private PeakDetailViewListener listener;
     private RecyclerView startingPointList;
+    private Button additionalButton;
 
     public PeakDetailsViewMvp(Context context, LayoutInflater inflater, ViewGroup container, Peak peak) {
         this.context = context;
         if(!peak.isCompleted()) {
             rootView = inflater.inflate(R.layout.fragment_peak_details, container, false);
+            init(peak);
             prepareNotConqueredView();
         } else {
             rootView = inflater.inflate(R.layout.fragment_peak_details_complete, container, false);
-            prepareConqueredView();
+            init(peak);
+            prepareConqueredView(peak);
         }
-        init();
     }
 
-    private void prepareConqueredView() {
-
+    private void prepareConqueredView(Peak peak) {
+        TextView conqueredDateText = rootView.findViewById(R.id.peakDetailsDate);
+        TextView validationText = rootView.findViewById(R.id.peakDetailsValidation);
+        TextView routeText = rootView.findViewById(R.id.peakDetailsRoute);
+        TextView photoText = rootView.findViewById(R.id.peakDetailsPhoto);
+        conqueredDateText.setText(String.format("Data: %s", peak.getConqueredDate()));
+        peak.setValidationText(validationText);
+        peak.setRouteText(routeText);
+        peak.setPhotoText(photoText);
+        pictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.interactWithPicture();
+            }
+        });
+        additionalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.showPicture();
+            }
+        });
     }
 
     private void prepareNotConqueredView() {
         startingPointList = rootView.findViewById(R.id.startingPointList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         startingPointList.setLayoutManager(layoutManager);
+        pictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.takePicture();
+            }
+        });
+        additionalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.markConquered();
+            }
+        });
     }
 
-    private void init() {
+    private void init(Peak peak) {
+        TextView peakName = rootView.findViewById(R.id.peakName);
+        TextView peakHeight = rootView.findViewById(R.id.peakDetailsHeight);
+        TextView range = rootView.findViewById(R.id.peakDetailsRange);
         googleButton = rootView.findViewById(R.id.googleMap);
         touristButton = rootView.findViewById(R.id.touristMap);
         pictureButton = rootView.findViewById(R.id.peakPicture);
+        additionalButton = rootView.findViewById(R.id.peakDetailsAdditionalButton);
+        peakName.setText(peak.getName());
+        peakHeight.setText(peak.getHeight() + "m n.p.m.");
+        range.setText(peak.getRange());
         initListeners();
     }
 
@@ -65,12 +106,6 @@ public class PeakDetailsViewMvp implements MvpView {
             @Override
             public void onClick(View view) {
                 listener.openTouristMap();
-            }
-        });
-        pictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.takePicture();
             }
         });
     }
@@ -94,5 +129,11 @@ public class PeakDetailsViewMvp implements MvpView {
         void openTouristMap();
 
         void takePicture();
+
+        void markConquered();
+
+        void showPicture();
+
+        void interactWithPicture();
     }
 }

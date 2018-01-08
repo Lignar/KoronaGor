@@ -74,6 +74,21 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
         mListener.takePicture();
     }
 
+    @Override
+    public void markConquered() {
+
+    }
+
+    @Override
+    public void showPicture() {
+
+    }
+
+    @Override
+    public void interactWithPicture() {
+
+    }
+
     public interface OnPeakDetailsInteractionListener {
         void openGoogleMap();
 

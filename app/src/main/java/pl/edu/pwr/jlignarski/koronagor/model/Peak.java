@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -121,5 +122,21 @@ public class Peak {
 
     public List<StartingPoint> getStartingPoints() {
         return startingPoints;
+    }
+
+    public String getConqueredDate() {
+        return conquest.getConqueredDate();
+    }
+
+    public void setValidationText(TextView validationText) {
+        conquest.setValidationText(validationText);
+    }
+
+    public void setRouteText(TextView routeText) {
+        conquest.setRouteText(routeText);
+    }
+
+    public void setPhotoText(TextView photoText) {
+        conquest.setPhotoText(photoText);
     }
 }
