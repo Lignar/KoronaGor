@@ -14,42 +14,15 @@ import pl.edu.pwr.jlignarski.koronagor.R;
 public class MenuViewMvpImpl implements MenuViewMvp {
 
     private View rootView;
-    private Button peakListButton;
-    private MenuViewListener actionListener;
 
     public MenuViewMvpImpl(LayoutInflater inflater, ViewGroup container) {
         this.rootView = inflater.inflate(R.layout.activity_menu, container);
-        initialize();
     }
 
-    private void initialize() {
-        peakListButton = rootView.findViewById(R.id.peak_list_button);
-        createListeners();
-    }
-
-    private void createListeners() {
-        peakListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionListener.onPeakListButtonClick();
-            }
-        });
-        rootView.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionListener.updateDatabase();
-//                actionListener.loadAssets();
-            }
-        });
-    }
 
     @Override
     public View getRootView() {
         return rootView;
     }
 
-    @Override
-    public void attachListener(MenuViewListener listener) {
-        actionListener = listener;
-    }
 }

@@ -5,14 +5,4 @@ package pl.edu.pwr.jlignarski.koronagor.view;
  */
 
 public interface MenuViewMvp extends MvpView {
-    interface MenuViewListener {
-
-        void onPeakListButtonClick();
-
-        void loadAssets();
-
-        void updateDatabase();
-    }
-
-    void attachListener(MenuViewListener listener);
 }
