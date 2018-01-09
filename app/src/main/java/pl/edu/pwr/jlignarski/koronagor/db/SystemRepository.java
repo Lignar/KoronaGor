@@ -14,4 +14,6 @@ public interface SystemRepository {
     Peak getPeakById(int peakId);
 
     void loadMapsToStorage();
+
+    void migrateFromStatic();
 }

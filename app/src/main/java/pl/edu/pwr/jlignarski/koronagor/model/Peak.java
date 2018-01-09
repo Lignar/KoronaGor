@@ -15,8 +15,12 @@ import com.qozix.tileview.TileView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
 import pl.edu.pwr.jlignarski.koronagor.R;
 import pl.edu.pwr.jlignarski.koronagor.db.RepositoryDelegate;
+import pl.edu.pwr.jlignarski.koronagor.db.UserRepository;
+import pl.edu.pwr.jlignarski.koronagor.db.realm.PeakR;
+import pl.edu.pwr.jlignarski.koronagor.db.realm.StartingPointR;
 
 /**
  * @author janusz on 08.12.17.
@@ -30,7 +34,7 @@ public class Peak {
     private String range;
     private final double latitude;
     private final double longitude;
-    private List<StartingPoint> startingPoints;
+    private List<StartingPoint> startingPoints = new ArrayList<>();
     private MapInfo mapInfo;
     private Conquest conquest;
 
@@ -50,6 +54,27 @@ public class Peak {
 
     public Peak(int id, String name, int height, String range) {
         this(id, name, height, range, 0, 0, new ArrayList<StartingPoint>(), "", 0, 0, 0, 0, 0, 0, false);
+    }
+
+    public Peak(PeakR peakR) {
+        if (peakR != null) {
+            id = peakR.getId();
+            name = peakR.getName();
+            height = peakR.getHeight();
+            range = peakR.getRange();
+            latitude = peakR.getLatitude();
+            longitude = peakR.getLongitude();
+            for (StartingPointR startingPointR : peakR.getStartingPoints()) {
+                startingPoints.add(new StartingPoint(startingPointR));
+            }
+            if (peakR.getMapInfo() != null) {
+                mapInfo = new MapInfo(peakR.getMapInfo());
+            }
+            conquest = RepositoryDelegate.getUserRepo().getConquestByPeakId(getId());
+        } else {
+            latitude = 0;
+            longitude = 0;
+        }
     }
 
     public String getName() {
@@ -78,7 +103,9 @@ public class Peak {
         for (StartingPoint startingPoint : startingPoints) {
             result.add(startingPoint.buildMarker());
         }
-        result.add(conquest.buildMarker());
+        if (conquest.hasPhoto()) {
+            result.add(conquest.buildMarker());
+        }
         return result;
     }
 
@@ -146,6 +173,11 @@ public class Peak {
 
     public void conquer(Location lastLocation) {
         conquest.conquer(verifyLocation(lastLocation));
+        updateConquest();
+    }
+
+    private void updateConquest() {
+        RepositoryDelegate.getUserRepo().updateConquest(id, conquest.toRealm());
     }
 
     private boolean verifyLocation(Location lastLocation) {
@@ -170,6 +202,7 @@ public class Peak {
 
     public void photoAdded() {
         conquest.photoAdded();
+        updateConquest();
     }
 
     public boolean isPositionOnMap(Location lastLocation) {
@@ -177,14 +210,34 @@ public class Peak {
     }
 
     public Trip createTrip() {
-        return conquest.createTrip();
+        Trip trip = conquest.createTrip();
+        updateConquest();
+        return trip;
     }
 
     public void addTripPoint(Trip trip, Location lastLocation) {
         trip.addPoint(lastLocation);
+        updateConquest();
     }
 
     public List<Path> buildPaths() {
         return conquest.buildPaths(mapInfo);
+    }
+
+    public PeakR toRealm() {
+        PeakR peakR = new PeakR();
+        peakR.setId(id);
+        peakR.setHeight(height);
+        peakR.setLatitude(latitude);
+        peakR.setLongitude(longitude);
+        peakR.setName(name);
+        peakR.setRange(range);
+        peakR.setMapInfo(mapInfo.toRealm());
+        RealmList<StartingPointR> realmList = new RealmList<>();
+        for (StartingPoint startingPoint : startingPoints) {
+            realmList.add(startingPoint.toRealm());
+        }
+        peakR.setStartingPoints(realmList);
+        return peakR;
     }
 }

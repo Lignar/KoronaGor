@@ -1,5 +1,6 @@
 package pl.edu.pwr.jlignarski.koronagor.db;
 
+import pl.edu.pwr.jlignarski.koronagor.db.realm.ConquestR;
 import pl.edu.pwr.jlignarski.koronagor.model.Conquest;
 
 /**
@@ -8,4 +9,6 @@ import pl.edu.pwr.jlignarski.koronagor.model.Conquest;
 
 public interface UserRepository {
     Conquest getConquestByPeakId(int id);
+
+    void updateConquest(int id, ConquestR conquestR);
 }

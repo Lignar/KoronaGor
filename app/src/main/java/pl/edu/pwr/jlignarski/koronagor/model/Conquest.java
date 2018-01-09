@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import pl.edu.pwr.jlignarski.koronagor.db.realm.ConquestR;
+import pl.edu.pwr.jlignarski.koronagor.db.realm.TripR;
+
 /**
  * @author janusz on 07.01.18.
  */
@@ -25,6 +28,24 @@ public class Conquest {
     private boolean validated;
     private LatLng photoPosition;
     private List<Trip> trips = new ArrayList<>();
+
+    public Conquest(ConquestR conquest) {
+        if (conquest != null) {
+            completed = conquest.isCompleted();
+            conqueredDate = conquest.getConqueredDate();
+            validated = conquest.isValidated();
+            if (conquest.getPhotoPosition() != null) {
+                photoPosition = new LatLng(conquest.getPhotoPosition().getLatitute(), conquest.getPhotoPosition().getLongitude());
+            }
+            for (TripR tripR : conquest.getTrips()) {
+                trips.add(new Trip(tripR));
+            }
+        }
+    }
+
+    public Conquest() {
+
+    }
 
     public boolean isCompleted() {
         return completed;
@@ -109,5 +130,9 @@ public class Conquest {
             }
         }
         return result;
+    }
+
+    public ConquestR toRealm() {
+        return new ConquestR(completed, conqueredDate, validated, photoPosition, trips);
     }
 }

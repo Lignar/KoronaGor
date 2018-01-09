@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.qozix.tileview.TileView;
 
+import pl.edu.pwr.jlignarski.koronagor.db.realm.MapInfoR;
+
 /**
  * @author janusz on 10.12.17.
  */
@@ -28,6 +30,16 @@ class MapInfo {
         this.ye = ye;
     }
 
+    public MapInfo(MapInfoR mapInfo) {
+        mapRegex = mapInfo.getMapRegex();
+        width = mapInfo.getWidth();
+        height = mapInfo.getHeight();
+        xs = mapInfo.getXs();
+        xe = mapInfo.getXe();
+        ys = mapInfo.getYs();
+        ye = mapInfo.getYe();
+    }
+
     public String getRegex() {
         return mapRegex;
     }
@@ -48,5 +60,9 @@ class MapInfo {
 
     public boolean isPositionOnMap(double latitude, double longitude) {
         return xs < longitude && longitude < xe && ye < latitude && latitude < ys;
+    }
+
+    public MapInfoR toRealm() {
+        return new MapInfoR(mapRegex, width, height, xs, xe, ys, ye);
     }
 }

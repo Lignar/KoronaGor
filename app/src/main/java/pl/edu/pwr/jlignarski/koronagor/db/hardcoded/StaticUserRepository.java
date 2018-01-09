@@ -1,6 +1,7 @@
 package pl.edu.pwr.jlignarski.koronagor.db.hardcoded;
 
 import pl.edu.pwr.jlignarski.koronagor.db.UserRepository;
+import pl.edu.pwr.jlignarski.koronagor.db.realm.ConquestR;
 import pl.edu.pwr.jlignarski.koronagor.model.Conquest;
 
 /**
@@ -33,5 +34,10 @@ public class StaticUserRepository implements UserRepository {
         } else {
             return new Conquest();
         }
+    }
+
+    @Override
+    public void updateConquest(int id, ConquestR conquestR) {
+
     }
 }

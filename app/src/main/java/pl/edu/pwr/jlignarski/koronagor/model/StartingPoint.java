@@ -6,6 +6,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import pl.edu.pwr.jlignarski.koronagor.db.realm.StartingPointR;
+
 /**
  * @author janusz on 09.12.17.
  */
@@ -22,6 +24,13 @@ public class StartingPoint {
         this.latitude = latitude;
         this.longitude = longitude;
         this.reqTime = reqTime;
+    }
+
+    public StartingPoint(StartingPointR startingPointR) {
+        name = startingPointR.getName();
+        latitude = startingPointR.getLatitude();
+        longitude = startingPointR.getLongitude();
+        reqTime = startingPointR.getReqTime();
     }
 
     public String getName() {
@@ -46,5 +55,9 @@ public class StartingPoint {
 
     public void addPathPoint(Path path, MapInfo mapInfo) {
         path.lineTo((float)mapInfo.lngPosition(longitude), (float)mapInfo.latPosition(latitude));
+    }
+
+    public StartingPointR toRealm() {
+        return new StartingPointR(name, latitude, longitude, reqTime);
     }
 }

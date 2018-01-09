@@ -108,4 +108,9 @@ public class StaticSystemRepository implements SystemRepository {
 
         }
     }
+
+    @Override
+    public void migrateFromStatic() {
+
+    }
 }
