@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import pl.edu.pwr.jlignarski.koronagor.view.MenuViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.view.MenuViewMvpImpl;
-import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
+import pl.edu.pwr.jlignarski.koronagor.db.RepositoryDelegate;
 
 public class MenuActivity extends AppCompatActivity implements MenuViewMvp.MenuViewListener {
 

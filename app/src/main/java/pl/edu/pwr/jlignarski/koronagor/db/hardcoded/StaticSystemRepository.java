@@ -1,4 +1,4 @@
-package pl.edu.pwr.jlignarski.koronagor.model;
+package pl.edu.pwr.jlignarski.koronagor.db.hardcoded;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -13,11 +13,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import pl.edu.pwr.jlignarski.koronagor.db.SystemRepository;
+import pl.edu.pwr.jlignarski.koronagor.model.App;
+import pl.edu.pwr.jlignarski.koronagor.model.Peak;
+import pl.edu.pwr.jlignarski.koronagor.model.StartingPoint;
+
 /**
  * @author janusz on 08.12.17.
  */
 
-class StaticSystemRepository implements SystemRepository {
+public class StaticSystemRepository implements SystemRepository {
 
     private static StaticSystemRepository instance;
     private List<Peak> peaks;

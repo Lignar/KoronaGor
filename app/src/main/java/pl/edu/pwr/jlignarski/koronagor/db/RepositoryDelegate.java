@@ -1,4 +1,7 @@
-package pl.edu.pwr.jlignarski.koronagor.model;
+package pl.edu.pwr.jlignarski.koronagor.db;
+
+import pl.edu.pwr.jlignarski.koronagor.db.hardcoded.StaticSystemRepository;
+import pl.edu.pwr.jlignarski.koronagor.db.hardcoded.StaticUserRepository;
 
 /**
  * @author janusz on 08.12.17.

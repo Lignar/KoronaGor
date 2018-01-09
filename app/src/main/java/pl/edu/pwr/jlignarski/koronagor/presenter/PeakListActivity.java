@@ -10,8 +10,8 @@ import pl.edu.pwr.jlignarski.koronagor.view.PeakListAdapter;
 import pl.edu.pwr.jlignarski.koronagor.view.PeakListViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.view.PeakListViewMvpImpl;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
-import pl.edu.pwr.jlignarski.koronagor.model.RepositoryDelegate;
-import pl.edu.pwr.jlignarski.koronagor.model.SystemRepository;
+import pl.edu.pwr.jlignarski.koronagor.db.RepositoryDelegate;
+import pl.edu.pwr.jlignarski.koronagor.db.SystemRepository;
 
 public class PeakListActivity extends AppCompatActivity implements PeakListViewMvp.PeakListViewListener {
 

@@ -19,7 +19,7 @@ import java.util.List;
  * @author janusz on 07.01.18.
  */
 
-class Conquest {
+public class Conquest {
     private boolean completed;
     private String conqueredDate;
     private boolean validated;

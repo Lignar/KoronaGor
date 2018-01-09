@@ -1,10 +1,13 @@
-package pl.edu.pwr.jlignarski.koronagor.model;
+package pl.edu.pwr.jlignarski.koronagor.db.hardcoded;
+
+import pl.edu.pwr.jlignarski.koronagor.db.UserRepository;
+import pl.edu.pwr.jlignarski.koronagor.model.Conquest;
 
 /**
  * @author janusz on 07.01.18.
  */
 
-class StaticUserRepository implements UserRepository {
+public class StaticUserRepository implements UserRepository {
 
     private static StaticUserRepository instance;
 

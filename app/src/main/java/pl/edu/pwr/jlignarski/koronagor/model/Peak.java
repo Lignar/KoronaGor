@@ -13,11 +13,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.qozix.tileview.TileView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
+import pl.edu.pwr.jlignarski.koronagor.db.RepositoryDelegate;
 
 /**
  * @author janusz on 08.12.17.
