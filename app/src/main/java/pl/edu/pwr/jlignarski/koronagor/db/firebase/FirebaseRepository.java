@@ -51,8 +51,8 @@ public class FirebaseRepository {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         for (PeakR peakR : result) {
             if (peakR.getMapInfo().getMapRegex() != null && !peakR.getMapInfo().getMapRegex().isEmpty()) {
-                for (int i = -1; i < 6; i++) {
-                    for (int j = -1; j < 6; j++) {
+                for (int i = -1; i < 5; i++) {
+                    for (int j = -1; j < 4; j++) {
                         final String formattedName = String.format(peakR.getMapInfo().getMapRegex(), i, j);
                         try {
                             storageReference.child(formattedName).getBytes(Long.MAX_VALUE)
