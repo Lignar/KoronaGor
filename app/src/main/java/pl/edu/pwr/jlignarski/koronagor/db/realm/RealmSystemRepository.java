@@ -1,14 +1,13 @@
 package pl.edu.pwr.jlignarski.koronagor.db.realm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import pl.edu.pwr.jlignarski.koronagor.db.SystemRepository;
+import pl.edu.pwr.jlignarski.koronagor.db.firebase.PeakF;
 import pl.edu.pwr.jlignarski.koronagor.db.hardcoded.StaticSystemRepository;
-import pl.edu.pwr.jlignarski.koronagor.model.*;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 
 /**
@@ -67,5 +66,15 @@ public class RealmSystemRepository implements SystemRepository {
         realm.insertOrUpdate(peakRS);
         realm.commitTransaction();
         realm.close();
+    }
+
+    public static List<PeakF> getAllFirebasePeaks() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<PeakR> all = realm.where(PeakR.class).findAll();
+        List<PeakF> result = new ArrayList<>();
+        for (PeakR peakR : all) {
+            result.add(new PeakF(peakR));
+        }
+        return result;
     }
 }

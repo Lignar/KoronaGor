@@ -20,6 +20,9 @@ public class PeakR extends RealmObject {
     private RealmList<StartingPointR> startingPoints;
     private MapInfoR mapInfo;
 
+    public PeakR() {
+    }
+
     public int getId() {
         return id;
     }
