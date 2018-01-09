@@ -1,6 +1,7 @@
 package pl.edu.pwr.jlignarski.koronagor.model;
 
 import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.qozix.tileview.TileView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pl.edu.pwr.jlignarski.koronagor.R;
@@ -168,5 +171,21 @@ public class Peak {
 
     public void photoAdded() {
         conquest.photoAdded();
+    }
+
+    public boolean isPositionOnMap(Location lastLocation) {
+        return mapInfo.isPositionOnMap(lastLocation.getLatitude(), lastLocation.getLongitude());
+    }
+
+    public Trip createTrip() {
+        return conquest.createTrip();
+    }
+
+    public void addTripPoint(Trip trip, Location lastLocation) {
+        trip.addPoint(lastLocation);
+    }
+
+    public List<Path> buildPaths() {
+        return conquest.buildPaths(mapInfo);
     }
 }

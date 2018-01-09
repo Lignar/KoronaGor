@@ -124,11 +124,6 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
     }
 
     @Override
-    public void toggleTripRecording() {
-
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();

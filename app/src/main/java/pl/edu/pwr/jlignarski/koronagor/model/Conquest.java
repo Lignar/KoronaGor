@@ -1,6 +1,7 @@
 package pl.edu.pwr.jlignarski.koronagor.model;
 
 import android.graphics.Color;
+import android.graphics.Path;
 import android.location.Location;
 import android.view.View;
 import android.widget.TextView;
@@ -10,7 +11,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author janusz on 07.01.18.
@@ -20,8 +23,8 @@ class Conquest {
     private boolean completed;
     private String conqueredDate;
     private boolean validated;
-    private Object route;
     private LatLng photoPosition;
+    private List<Trip> trips = new ArrayList<>();
 
     public boolean isCompleted() {
         return completed;
@@ -42,11 +45,19 @@ class Conquest {
     }
 
     public void setRouteText(TextView routeText) {
-        if (route != null) {
+        if (!trips.isEmpty() && tripsHavePoints()) {
             routeText.setText("Zapisano trasę!");
         } else {
             routeText.setVisibility(View.GONE);
         }
+    }
+
+    private boolean tripsHavePoints() {
+        boolean result = false;
+        for (int i = 0; i < trips.size() && !result; i++) {
+            result = trips.get(i).hasPoints();
+        }
+        return result;
     }
 
     public void setPhotoText(TextView photoText) {
@@ -82,5 +93,21 @@ class Conquest {
         markerOptions.position(photoPosition);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
         return new MarkerOptionsWrapper(markerOptions, true);
+    }
+
+    public Trip createTrip() {
+        Trip trip = new Trip();
+        trips.add(trip);
+        return trip;
+    }
+
+    public List<Path> buildPaths(MapInfo mapInfo) {
+        List<Path> result = new ArrayList<>();
+        for (Trip trip : trips) {
+            if (trip.hasPoints() && (!trip.equals(LocationService.getInstance().getCurrentTrip()))) {
+                result.add(trip.buildPath(mapInfo));
+            }
+        }
+        return result;
     }
 }

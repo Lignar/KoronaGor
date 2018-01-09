@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,11 +34,14 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks, Goo
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
+    private boolean isRecording;
+    private Peak peak;
+    private Trip trip;
 
     private LocationService() {
     }
 
-    public static LocationService getInstance() {
+    public static synchronized LocationService getInstance() {
         if (instance == null) {
             instance = new LocationService();
             instance.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(App.getAppContext());
@@ -56,7 +60,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     private Location lastLocation;
-    LocationCallback locationCallback = new LocationCallback(){
+    private LocationCallback locationCallback = new LocationCallback(){
         @Override
         public void onLocationResult(LocationResult locationResult) {
             for (Location location : locationResult.getLocations()) {
@@ -65,6 +69,9 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks, Goo
             }
             for (LocationListener observer : locationObservers) {
                 observer.onLocationChanged(lastLocation);
+            }
+            if (isRecording) {
+                peak.addTripPoint(trip, lastLocation);
             }
         }
 
@@ -108,5 +115,30 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks, Goo
 
     public void unregisterLocationObserver(LocationListener listener) {
         locationObservers.remove(listener);
+    }
+
+    public void toggleTripRecording(Peak peak) {
+        if (canRecord(peak)) {
+            if (!isRecording) {
+                isRecording = true;
+                this.peak = peak;
+                trip = peak.createTrip();
+                peak.addTripPoint(trip, lastLocation);
+                Toast.makeText(App.getAppContext(), "Rozpoczęto nagrywanie", Toast.LENGTH_LONG).show();
+            } else {
+                isRecording = false;
+                Toast.makeText(App.getAppContext(), "Zakończono nagrywanie", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(App.getAppContext(), "Nie znajdujesz się w pobliżu szczytu!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean canRecord(Peak peak) {
+        return lastLocation != null && peak.isPositionOnMap(lastLocation);
+    }
+
+    public Trip getCurrentTrip() {
+        return isRecording ? trip : null;
     }
 }

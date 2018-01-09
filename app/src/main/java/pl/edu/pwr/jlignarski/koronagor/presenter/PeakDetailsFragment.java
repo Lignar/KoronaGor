@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import pl.edu.pwr.jlignarski.koronagor.model.LocationService;
 import pl.edu.pwr.jlignarski.koronagor.view.PeakDetailsViewMvp;
 import pl.edu.pwr.jlignarski.koronagor.model.Peak;
 import pl.edu.pwr.jlignarski.koronagor.view.StartingPointListAdapter;
@@ -97,7 +98,7 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
 
     @Override
     public void toggleTripRecording() {
-        mListener.toggleTripRecording();
+        LocationService.getInstance().toggleTripRecording(peak);
     }
 
     private void showPictureDialog() {
@@ -127,7 +128,5 @@ public class PeakDetailsFragment extends Fragment implements PeakDetailsViewMvp.
         void markConquered();
 
         void showPicture();
-
-        void toggleTripRecording();
     }
 }

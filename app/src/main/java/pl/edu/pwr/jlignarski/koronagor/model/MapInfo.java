@@ -45,4 +45,8 @@ class MapInfo {
         double v = ((longitude - xs) / (xe - xs)) * width;
         return v;
     }
+
+    public boolean isPositionOnMap(double latitude, double longitude) {
+        return xs < longitude && longitude < xe && ye < latitude && latitude < ys;
+    }
 }
