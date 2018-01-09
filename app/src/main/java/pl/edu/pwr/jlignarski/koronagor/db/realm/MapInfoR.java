@@ -1,6 +1,7 @@
 package pl.edu.pwr.jlignarski.koronagor.db.realm;
 
 import io.realm.RealmObject;
+import pl.edu.pwr.jlignarski.koronagor.db.firebase.MapInfoF;
 
 /**
  * @author janusz on 10.12.17.
@@ -26,6 +27,11 @@ public class MapInfoR extends RealmObject {
         this.xe = xe;
         this.ys = ys;
         this.ye = ye;
+    }
+
+    public MapInfoR(MapInfoF mapInfo) {
+        this(mapInfo.getMapRegex(), mapInfo.getWidth(), mapInfo.getHeight(), mapInfo.getXs(), mapInfo.getXe(), mapInfo.getYs(),
+                mapInfo.getYe());
     }
 
     public String getMapRegex() {

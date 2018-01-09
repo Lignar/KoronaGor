@@ -3,6 +3,8 @@ package pl.edu.pwr.jlignarski.koronagor.db.realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import pl.edu.pwr.jlignarski.koronagor.db.firebase.PeakF;
+import pl.edu.pwr.jlignarski.koronagor.db.firebase.StartingPointF;
 
 /**
  * @author janusz on 08.12.17.
@@ -21,6 +23,28 @@ public class PeakR extends RealmObject {
     private MapInfoR mapInfo;
 
     public PeakR() {
+    }
+
+    public PeakR(PeakF value) {
+        this(value.getId(), value.getName(), value.getHeight(), value.getRange(), value.getLatitude(), value.getLongitude());
+        startingPoints = new RealmList<>();
+        if (value.getStartingPoints() != null) {
+            for (StartingPointF startingPointF : value.getStartingPoints()) {
+                startingPoints.add(new StartingPointR(startingPointF));
+            }
+        }
+        if (value.getMapInfo() != null) {
+            mapInfo = new MapInfoR(value.getMapInfo());
+        }
+    }
+
+    public PeakR(int id, String name, int height, String range, double latitude, double longitude) {
+        this.id = id;
+        this.name = name;
+        this.height = height;
+        this.range = range;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int getId() {

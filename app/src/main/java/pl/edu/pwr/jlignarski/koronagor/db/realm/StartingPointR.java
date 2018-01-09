@@ -1,6 +1,7 @@
 package pl.edu.pwr.jlignarski.koronagor.db.realm;
 
 import io.realm.RealmObject;
+import pl.edu.pwr.jlignarski.koronagor.db.firebase.StartingPointF;
 
 /**
  * @author janusz on 09.12.17.
@@ -20,6 +21,10 @@ public class StartingPointR extends RealmObject {
         this.latitude = latitude;
         this.longitude = longitude;
         this.reqTime = reqTime;
+    }
+
+    public StartingPointR(StartingPointF startingPointF) {
+        this(startingPointF.getName(), startingPointF.getLatitude(), startingPointF.getLongitude(), startingPointF.getReqTime());
     }
 
     public String getName() {

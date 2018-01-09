@@ -24,7 +24,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final String OK = "OK";
     private static final String CANCEL = "Anuluj";
     private static final String DB_UPDATE_TITLE = "Nowa wersja bazy danych";
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,10 @@ public class MenuActivity extends AppCompatActivity {
                             connected = true;
                             long remoteVersion = (long) dataSnapshot.getValue();
                             if (remoteVersion != dbVersion) {
-                                showUpdateDialog();
+                                showUpdateDialog(remoteVersion);
+                            } else {
+                                Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
+                                startActivity(intent);
                             }
                         }
                     }
@@ -117,13 +120,13 @@ public class MenuActivity extends AppCompatActivity {
 //        RealmSystemRepository.getInstance().migrateFromStatic();
 //    }
 
-            public void showUpdateDialog() {
+            public void showUpdateDialog(final long remoteVersion) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(DB_UPDATE_TITLE);
                 builder.setMessage(DB_UPDATE_MESSAGE)
                         .setPositiveButton(OK, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                new FirebaseRepository().updateDB();
+                                new FirebaseRepository().updateDB(MenuActivity.this, remoteVersion);
                             }
                         })
                         .setNegativeButton(CANCEL, new DialogInterface.OnClickListener() {
@@ -135,7 +138,7 @@ public class MenuActivity extends AppCompatActivity {
                         .setNeutralButton("Reset", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                new FirebaseRepository().resetAndUpdateDB();
+                                new FirebaseRepository().resetAndUpdateDB(MenuActivity.this, remoteVersion);
                             }
                         });
                 builder.create().show();
