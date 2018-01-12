@@ -57,7 +57,6 @@ public class FirebaseRepository {
         }
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         new Thread() {
-
             @Override
             public void run() {
                 for (PeakF peakF : result) {

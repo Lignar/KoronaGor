@@ -135,6 +135,8 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
     public void onDestroy() {
         super.onDestroy();
         peakGoogleMapView.getMap().onDestroy();
+        activeMarker = null;
+        routeDrawingService = null;
     }
 
     @Override
@@ -148,7 +150,7 @@ public class PeakGoogleMapFragment extends Fragment implements OnMapReadyCallbac
         lastLocation = location;
         if (activeMarker != null) {
             redrawRoute(activeMarker);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+//            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         }
     }
 

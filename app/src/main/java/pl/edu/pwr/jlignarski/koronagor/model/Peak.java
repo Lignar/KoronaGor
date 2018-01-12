@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,7 +124,7 @@ public class Peak {
         mapInfo.setMapSize(rootView);
     }
 
-    public void addMarkers(TileView rootView) {
+    public void addMarkers(final TileView rootView) {
         rootView.addMarker(createMarkerImageView(R.drawable.markergreen), mapInfo.lngPosition(longitude), mapInfo.latPosition
                 (latitude), -0.5f, -1f);
         for (StartingPoint startingPoint : startingPoints) {
@@ -131,6 +132,12 @@ public class Peak {
             rootView.addMarker(createMarkerImageView(R.drawable.marker), mapInfo.lngPosition(latLng.longitude), mapInfo.latPosition(latLng.latitude), -0.5f,
                     -1f);
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rootView.scrollToAndCenter(mapInfo.lngPosition(longitude), mapInfo.latPosition(latitude));
+            }
+        }, 50);
     }
 
     private ImageView createMarkerImageView(int marker) {
