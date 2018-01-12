@@ -36,6 +36,7 @@ public class FirebaseRepository {
     private int counter;
     private File internalStorage = App.getAppContext().getDir("firebase_storage", Context.MODE_PRIVATE);
     private Semaphore semaphore = new Semaphore(50);
+    private String finalMessage = "Załadowano dane";
 
     public void resetAndUpdateDB(MenuActivity context, long remoteVersion) {
         for (File file : App.getAppContext().getFilesDir().listFiles()) {
@@ -110,7 +111,7 @@ public class FirebaseRepository {
 
     private void tryOpenList(MenuActivity context, long remoteVersion) {
         if (counter == 0) {
-            Toast.makeText(context, "Załadowano obrazy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, finalMessage, Toast.LENGTH_SHORT).show();
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
             preferences.edit().putLong("dbVersion", remoteVersion).apply();
             context.startListActivity();
@@ -148,15 +149,14 @@ public class FirebaseRepository {
                                 long remoteImageVersion = (long) dataSnapshot.getValue();
                                 if (remoteImageVersion > imageDbVersion) {
                                     Toast.makeText(context, "Załadowano dane, ładuję obrazy", Toast.LENGTH_LONG).show();
+                                    finalMessage = "Załadowano obrazy";
                                     updateImages(context, resultF, remoteVersion);
                                 } else {
-                                    Toast.makeText(context, "Załadowano dane", Toast.LENGTH_LONG).show();
                                     tryOpenList(context, remoteVersion);
                                 }
                             }
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(context, "Załadowano dane", Toast.LENGTH_LONG).show();
                                 tryOpenList(context, remoteVersion);
                             }
                         });
