@@ -33,6 +33,7 @@ import pl.edu.pwr.jlignarski.koronagor.presenter.MenuActivity;
 public class FirebaseRepository {
 
     private int counter;
+    private File internalStorage = App.getAppContext().getDir("firebase_storage", Context.MODE_PRIVATE);
 
     public void resetAndUpdateDB(MenuActivity context, long remoteVersion) {
         for (File file : App.getAppContext().getFilesDir().listFiles()) {
@@ -46,6 +47,12 @@ public class FirebaseRepository {
     }
 
     private void updateImages(final MenuActivity context, List<PeakR> result, final long remoteVersion) {
+        if (!internalStorage.exists()) {
+            internalStorage.mkdirs();
+        }
+        for (File file : internalStorage.listFiles()) {
+            file.delete();
+        }
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         for (PeakR peakR : result) {
             if (peakR.getMapInfo().getMapRegex() != null && !peakR.getMapInfo().getMapRegex().isEmpty()) {
@@ -58,7 +65,8 @@ public class FirebaseRepository {
                                     @Override
                                     public void onSuccess(byte[] bytes) {
                                         try {
-                                            FileOutputStream fos = App.getAppContext().openFileOutput(formattedName, Context.MODE_PRIVATE);
+                                            File newBitmap = new File(internalStorage, formattedName);
+                                            FileOutputStream fos = new FileOutputStream(newBitmap);
                                             fos.write(bytes);
                                             fos.flush();
                                             fos.close();

@@ -197,7 +197,7 @@ public class Peak {
     }
 
     public Bitmap getPhoto() {
-        return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), -2, -2));
+        return BitmapProviderInternalStorage.getUserBitmap(App.getAppContext(), String.format(getMapRegex(), -2, -2));
     }
 
     public void photoAdded() {

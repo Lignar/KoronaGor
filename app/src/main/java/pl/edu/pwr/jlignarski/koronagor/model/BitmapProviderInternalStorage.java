@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import com.qozix.tileview.graphics.BitmapProvider;
 import com.qozix.tileview.tiles.Tile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -18,6 +20,7 @@ import java.io.InputStream;
 public class BitmapProviderInternalStorage implements BitmapProvider {
 
     private static final BitmapFactory.Options FACTORY_OPTIONS = new BitmapFactory.Options();
+    private static final File SYSTEM_IMAGE_STORAGE = App.getAppContext().getDir("firebase_storage", Context.MODE_PRIVATE);
     static {
         FACTORY_OPTIONS.inPreferredConfig = Bitmap.Config.RGB_565;
     }
@@ -37,10 +40,28 @@ public class BitmapProviderInternalStorage implements BitmapProvider {
     public static Bitmap getBitmap(Context context, String fileName) {
         Bitmap result = null;
         try {
+            File bitmapFile = new File(SYSTEM_IMAGE_STORAGE, fileName);
+            if( bitmapFile.exists()) {
+                InputStream inputStream = new FileInputStream(bitmapFile);
+                try {
+                    result = BitmapFactory.decodeStream( inputStream, null, FACTORY_OPTIONS);
+                } catch( OutOfMemoryError | Exception e ) {
+                    e.printStackTrace();
+                }
+            }
+        } catch( Exception e ) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static Bitmap getUserBitmap(Context context, String fileName) {
+        Bitmap result = null;
+        try {
             InputStream inputStream = context.openFileInput(fileName);
             if( inputStream != null ) {
                 try {
                     result = BitmapFactory.decodeStream( inputStream, null, FACTORY_OPTIONS);
+                    inputStream.close();
                 } catch( OutOfMemoryError | Exception e ) {
                     e.printStackTrace();
                 }
