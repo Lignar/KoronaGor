@@ -15,6 +15,8 @@ public class MapInfoF {
     private double xe;
     private double ys;
     private double ye;
+    private int iTiles;
+    private int jTiles;
 
     public MapInfoF() {
     }
@@ -88,5 +90,21 @@ public class MapInfoF {
 
     public void setYe(double ye) {
         this.ye = ye;
+    }
+
+    public int getiTiles() {
+        return iTiles;
+    }
+
+    public void setiTiles(int iTiles) {
+        this.iTiles = iTiles;
+    }
+
+    public int getjTiles() {
+        return jTiles;
+    }
+
+    public void setjTiles(int jTiles) {
+        this.jTiles = jTiles;
     }
 }

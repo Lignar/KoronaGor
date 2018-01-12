@@ -46,7 +46,7 @@ public class FirebaseRepository {
         updateData(context, remoteVersion);
     }
 
-    private void updateImages(final MenuActivity context, List<PeakR> result, final long remoteVersion) {
+    private void updateImages(final MenuActivity context, List<PeakF> result, final long remoteVersion) {
         if (!internalStorage.exists()) {
             internalStorage.mkdirs();
         }
@@ -54,39 +54,45 @@ public class FirebaseRepository {
             file.delete();
         }
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        for (PeakR peakR : result) {
-            if (peakR.getMapInfo().getMapRegex() != null && !peakR.getMapInfo().getMapRegex().isEmpty()) {
-                for (int i = -1; i < 5; i++) {
-                    for (int j = -1; j < 4; j++) {
-                        modifyCounter(1);
-                        final String formattedName = String.format(peakR.getMapInfo().getMapRegex(), i, j);
-                        storageReference.child(formattedName).getBytes(Long.MAX_VALUE)
-                                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                    @Override
-                                    public void onSuccess(byte[] bytes) {
-                                        try {
-                                            File newBitmap = new File(internalStorage, formattedName);
-                                            FileOutputStream fos = new FileOutputStream(newBitmap);
-                                            fos.write(bytes);
-                                            fos.flush();
-                                            fos.close();
-                                        } catch (java.io.IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        modifyCounter(-1);
-                                        tryOpenList(context, remoteVersion);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                modifyCounter(-1);
-                                tryOpenList(context, remoteVersion);
-                            }
-                        });
+        for (PeakF peakF : result) {
+            if (peakF.getMapInfo().getMapRegex() != null && !peakF.getMapInfo().getMapRegex().isEmpty()) {
+                downloadImage(context, remoteVersion, storageReference, peakF, 0, -1);
+                for (int i = 0; i <= peakF.getMapInfo().getiTiles(); i++) {
+                    for (int j = 0; j <= peakF.getMapInfo().getjTiles(); j++) {
+                        downloadImage(context, remoteVersion, storageReference, peakF, i, j);
                     }
                 }
             }
         }
+    }
+
+    private void downloadImage(final MenuActivity context, final long remoteVersion, StorageReference storageReference, PeakF peakF, int i, int j) {
+        modifyCounter(1);
+        final String formattedName = String.format(peakF.getMapInfo().getMapRegex(), i, j);
+        storageReference.child(formattedName).getBytes(Long.MAX_VALUE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        try {
+                            File newBitmap = new File(internalStorage, formattedName);
+                            FileOutputStream fos = new FileOutputStream(newBitmap);
+                            fos.write(bytes);
+                            fos.flush();
+                            fos.close();
+                        } catch (java.io.IOException e) {
+                            e.printStackTrace();
+                        }
+                        modifyCounter(-1);
+                        tryOpenList(context, remoteVersion);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String formattedName1 = formattedName;
+                modifyCounter(-1);
+                tryOpenList(context, remoteVersion);
+            }
+        });
     }
 
     private void tryOpenList(MenuActivity context, long remoteVersion) {
@@ -109,8 +115,10 @@ public class FirebaseRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<PeakR> result = new ArrayList<>();
+                List<PeakF> resultF = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PeakF value = snapshot.getValue(PeakF.class);
+                    resultF.add(value);
                     result.add(new PeakR(value));
                 }
                 Realm realm = Realm.getDefaultInstance();
@@ -119,7 +127,7 @@ public class FirebaseRepository {
                 realm.commitTransaction();
                 realm.close();
                 Toast.makeText(context, "Załadowano dane, ładuję obrazy", Toast.LENGTH_LONG).show();
-                updateImages(context, result, remoteVersion);
+                updateImages(context, resultF, remoteVersion);
             }
 
             @Override

@@ -103,7 +103,7 @@ public class PeakMapActivity extends AppCompatActivity implements PeakGoogleMapF
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            BitmapProviderInternalStorage.saveBitmap(imageBitmap, String.format(peak.getMapRegex(), -2, -2));
+            BitmapProviderInternalStorage.saveBitmap(imageBitmap, String.format(peak.getMapRegex(), 0, -2));
             peak.photoAdded();
         }
     }

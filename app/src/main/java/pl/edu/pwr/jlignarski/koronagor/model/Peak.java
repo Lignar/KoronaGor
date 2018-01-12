@@ -193,11 +193,11 @@ public class Peak {
     }
 
     public Bitmap getThumbnail() {
-        return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), -1, -1));
+        return BitmapProviderInternalStorage.getBitmap(App.getAppContext(), String.format(getMapRegex(), 0, -1));
     }
 
     public Bitmap getPhoto() {
-        return BitmapProviderInternalStorage.getUserBitmap(App.getAppContext(), String.format(getMapRegex(), -2, -2));
+        return BitmapProviderInternalStorage.getUserBitmap(App.getAppContext(), String.format(getMapRegex(), 0, -2));
     }
 
     public void photoAdded() {
