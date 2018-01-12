@@ -28,7 +28,7 @@ import java.util.Set;
 public class LocationService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LocationService";
-    private static final int UPDATE_INTERVAL = 60000;
+    private static final int UPDATE_INTERVAL = 10000;
     private static LocationService instance;
     private Set<LocationListener> locationObservers = new HashSet<>();
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -50,7 +50,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks, Goo
         return instance;
     }
 
-    protected synchronized void buildGoogleApiClient() {
+    private synchronized void buildGoogleApiClient() {
         googleApiClient = new GoogleApiClient.Builder(App.getAppContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)

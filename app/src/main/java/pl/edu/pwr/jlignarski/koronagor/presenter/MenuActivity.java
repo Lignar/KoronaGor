@@ -53,8 +53,8 @@ public class MenuActivity extends AppCompatActivity {
                             if (remoteVersion != dbVersion) {
                                 showUpdateDialog(remoteVersion);
                             } else {
-                                Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
-                                startActivity(intent);
+//                                startListActivity();
+                                showUpdateDialog(remoteVersion);
                             }
                         }
                     }
@@ -63,8 +63,7 @@ public class MenuActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                         if (!skipped) {
                             connected = true;
-                            Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
-                            startActivity(intent);
+                            startListActivity();
                         }
                     }
                 });
@@ -76,8 +75,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 if (!connected) {
                     skipped = true;
-                    Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
-                    startActivity(intent);
+                    startListActivity();
                 }
             }
         };
@@ -131,8 +129,7 @@ public class MenuActivity extends AppCompatActivity {
                         })
                         .setNegativeButton(CANCEL, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
-                                startActivity(intent);
+                                startListActivity();
                             }
                         })
                         .setNeutralButton("Reset", new DialogInterface.OnClickListener() {
@@ -143,4 +140,9 @@ public class MenuActivity extends AppCompatActivity {
                         });
                 builder.create().show();
             }
-        }
+
+    public void startListActivity() {
+        Intent intent = new Intent(App.getAppContext(), PeakListActivity.class);
+        startActivity(intent);
+    }
+}
