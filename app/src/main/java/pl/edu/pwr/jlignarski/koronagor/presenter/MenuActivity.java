@@ -53,12 +53,11 @@ public class MenuActivity extends AppCompatActivity {
                             if (remoteVersion != dbVersion) {
                                 showUpdateDialog(remoteVersion);
                             } else {
-//                                startListActivity();
-                                showUpdateDialog(remoteVersion);
+                                startListActivity();
+//                                showUpdateDialog(remoteVersion);
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         if (!skipped) {

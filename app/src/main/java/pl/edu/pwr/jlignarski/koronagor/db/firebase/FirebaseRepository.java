@@ -128,7 +128,7 @@ public class FirebaseRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<PeakR> result = new ArrayList<>();
-                List<PeakF> resultF = new ArrayList<>();
+                final List<PeakF> resultF = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     PeakF value = snapshot.getValue(PeakF.class);
                     resultF.add(value);
@@ -139,8 +139,27 @@ public class FirebaseRepository {
                 realm.insertOrUpdate(result);
                 realm.commitTransaction();
                 realm.close();
-                Toast.makeText(context, "Załadowano dane, ładuję obrazy", Toast.LENGTH_LONG).show();
-                updateImages(context, resultF, remoteVersion);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+                final long imageDbVersion = preferences.getLong("dbVersion", 0);
+                FirebaseDatabase.getInstance().getReference().child("imageVersion")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                long remoteImageVersion = (long) dataSnapshot.getValue();
+                                if (remoteImageVersion > imageDbVersion) {
+                                    Toast.makeText(context, "Załadowano dane, ładuję obrazy", Toast.LENGTH_LONG).show();
+                                    updateImages(context, resultF, remoteVersion);
+                                } else {
+                                    Toast.makeText(context, "Załadowano dane", Toast.LENGTH_LONG).show();
+                                    tryOpenList(context, remoteVersion);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(context, "Załadowano dane", Toast.LENGTH_LONG).show();
+                                tryOpenList(context, remoteVersion);
+                            }
+                        });
             }
 
             @Override
