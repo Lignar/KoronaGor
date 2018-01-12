@@ -15,11 +15,12 @@ public class MapInfoR extends RealmObject {
     private double xe;
     private double ys;
     private double ye;
+    private int tileSize;
 
     public MapInfoR() {
     }
 
-    public MapInfoR(String mapRegex, int width, int height, double xs, double xe, double ys, double ye) {
+    public MapInfoR(String mapRegex, int width, int height, double xs, double xe, double ys, double ye, int tileSize) {
         this.mapRegex = mapRegex;
         this.width = width;
         this.height = height;
@@ -27,11 +28,12 @@ public class MapInfoR extends RealmObject {
         this.xe = xe;
         this.ys = ys;
         this.ye = ye;
+        this.tileSize = tileSize;
     }
 
     public MapInfoR(MapInfoF mapInfo) {
         this(mapInfo.getMapRegex(), mapInfo.getWidth(), mapInfo.getHeight(), mapInfo.getXs(), mapInfo.getXe(), mapInfo.getYs(),
-                mapInfo.getYe());
+                mapInfo.getYe(), mapInfo.getTileSize());
     }
 
     public String getMapRegex() {
@@ -88,5 +90,13 @@ public class MapInfoR extends RealmObject {
 
     public void setYe(double ye) {
         this.ye = ye;
+    }
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public void setTileSize(int tileSize) {
+        this.tileSize = tileSize;
     }
 }

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import io.realm.Realm;
 import pl.edu.pwr.jlignarski.koronagor.db.realm.PeakR;
@@ -34,6 +35,7 @@ public class FirebaseRepository {
 
     private int counter;
     private File internalStorage = App.getAppContext().getDir("firebase_storage", Context.MODE_PRIVATE);
+    private Semaphore semaphore = new Semaphore(50);
 
     public void resetAndUpdateDB(MenuActivity context, long remoteVersion) {
         for (File file : App.getAppContext().getFilesDir().listFiles()) {
@@ -46,29 +48,40 @@ public class FirebaseRepository {
         updateData(context, remoteVersion);
     }
 
-    private void updateImages(final MenuActivity context, List<PeakF> result, final long remoteVersion) {
+    private void updateImages(final MenuActivity context, final List<PeakF> result, final long remoteVersion) {
         if (!internalStorage.exists()) {
             internalStorage.mkdirs();
         }
         for (File file : internalStorage.listFiles()) {
             file.delete();
         }
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        for (PeakF peakF : result) {
-            if (peakF.getMapInfo().getMapRegex() != null && !peakF.getMapInfo().getMapRegex().isEmpty()) {
-                downloadImage(context, remoteVersion, storageReference, peakF, 0, -1);
-                for (int i = 0; i <= peakF.getMapInfo().getiTiles(); i++) {
-                    for (int j = 0; j <= peakF.getMapInfo().getjTiles(); j++) {
-                        downloadImage(context, remoteVersion, storageReference, peakF, i, j);
+        final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        new Thread() {
+
+            @Override
+            public void run() {
+                for (PeakF peakF : result) {
+                    if (peakF.getMapInfo().getMapRegex() != null && !peakF.getMapInfo().getMapRegex().isEmpty()) {
+                        downloadImage(context, remoteVersion, storageReference, peakF, 0, -1);
+                        for (int i = 0; i <= peakF.getMapInfo().getiTiles(); i++) {
+                            for (int j = 0; j <= peakF.getMapInfo().getjTiles(); j++) {
+                                downloadImage(context, remoteVersion, storageReference, peakF, i, j);
+                            }
+                        }
                     }
                 }
             }
-        }
+        }.start();
     }
 
     private void downloadImage(final MenuActivity context, final long remoteVersion, StorageReference storageReference, PeakF peakF, int i, int j) {
         modifyCounter(1);
         final String formattedName = String.format(peakF.getMapInfo().getMapRegex(), i, j);
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         storageReference.child(formattedName).getBytes(Long.MAX_VALUE)
                 .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
@@ -82,13 +95,14 @@ public class FirebaseRepository {
                         } catch (java.io.IOException e) {
                             e.printStackTrace();
                         }
+                        semaphore.release();
                         modifyCounter(-1);
                         tryOpenList(context, remoteVersion);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                String formattedName1 = formattedName;
+                semaphore.release();
                 modifyCounter(-1);
                 tryOpenList(context, remoteVersion);
             }

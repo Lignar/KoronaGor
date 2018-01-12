@@ -19,6 +19,7 @@ class MapInfo {
     private final double xe;
     private final double ys;
     private final double ye;
+    private int tileSize;
 
     public MapInfo(String mapRegex, int width, int height, double xs, double xe, double ys, double ye) {
         this.mapRegex = mapRegex;
@@ -38,6 +39,7 @@ class MapInfo {
         xe = mapInfo.getXe();
         ys = mapInfo.getYs();
         ye = mapInfo.getYe();
+        tileSize = mapInfo.getTileSize();
     }
 
     public String getRegex() {
@@ -63,6 +65,10 @@ class MapInfo {
     }
 
     public MapInfoR toRealm() {
-        return new MapInfoR(mapRegex, width, height, xs, xe, ys, ye);
+        return new MapInfoR(mapRegex, width, height, xs, xe, ys, ye, tileSize);
+    }
+
+    public int getTileSize() {
+        return tileSize;
     }
 }

@@ -240,4 +240,8 @@ public class Peak {
         peakR.setStartingPoints(realmList);
         return peakR;
     }
+
+    public void setDetailLevel(TileView rootView) {
+        rootView.addDetailLevel(1f, this, mapInfo.getTileSize(), mapInfo.getTileSize());
+    }
 }
